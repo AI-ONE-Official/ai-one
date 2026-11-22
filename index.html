@@ -1,27 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Discover the world's leading AI tools in one place.">
 <meta name="theme-color" content="#080b14">
-<meta name="description" content="AI ONE — Discover the world's leading artificial intelligence tools for creativity, productivity, learning and innovation.">
 <title>AI ONE — Discover Intelligence</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
-:root {
-  --bg: #080b14;
-  --panel: #101625;
-  --panel2: #141d30;
-  --text: #f5f7ff;
-  --muted: #9ba8bd;
-  --accent: #8b7cff;
-  --accent2: #45d9e8;
-  --border: rgba(255,255,255,.09);
-}
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -33,9 +19,9 @@ html {
 }
 
 body {
-  font-family: Inter, Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  background: #080b14;
+  color: #fff;
   line-height: 1.6;
 }
 
@@ -50,139 +36,111 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-  background: rgba(8,11,20,.9);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  background: rgba(8,11,20,.95);
 }
 
 .logo {
-  font-size: 25px;
-  font-weight: 900;
-  letter-spacing: -1px;
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: 1px;
 }
 
 .logo span {
-  color: var(--accent);
+  color: #8b7cff;
 }
 
 nav {
   display: flex;
-  gap: 30px;
-  align-items: center;
+  gap: 28px;
 }
 
 nav a {
-  color: var(--muted);
+  color: #aeb4c5;
   font-size: 14px;
   transition: .3s;
 }
 
 nav a:hover {
-  color: white;
+  color: #fff;
 }
 
 .hero {
-  padding: 105px 7% 75px;
   text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero::before {
-  content: "";
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  background: var(--accent);
-  opacity: .13;
-  filter: blur(150px);
-  border-radius: 50%;
-  top: -250px;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
+  padding: 100px 20px 75px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(103,82,255,.20), transparent 65%);
 }
 
 .eyebrow {
-  display: inline-block;
-  padding: 8px 17px;
-  border: 1px solid rgba(139,124,255,.35);
-  border-radius: 30px;
-  color: #b9afff;
+  color: #a99cff;
   font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  margin-bottom: 25px;
+  letter-spacing: 4px;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
 .hero h1 {
-  font-size: clamp(38px, 7vw, 76px);
+  font-size: clamp(35px, 6vw, 65px);
   line-height: 1.12;
-  font-weight: 900;
-  letter-spacing: -3px;
-  max-width: 900px;
+  max-width: 850px;
   margin: auto;
+  letter-spacing: -2px;
 }
 
 .hero h1 span {
-  background: linear-gradient(100deg, #a99aff, #50dbe8);
+  background: linear-gradient(90deg, #a99cff, #64c9ff);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .hero p {
-  color: var(--muted);
-  max-width: 650px;
-  margin: 25px auto 32px;
+  max-width: 620px;
+  margin: 25px auto 30px;
+  color: #aeb4c5;
   font-size: 16px;
 }
 
-.hero-btn {
+.hero-button {
   display: inline-block;
-  padding: 14px 27px;
-  background: linear-gradient(110deg, #8270ff, #4dcae9);
-  color: #080b14;
-  border-radius: 9px;
-  font-weight: 800;
+  padding: 13px 28px;
+  border-radius: 30px;
+  background: linear-gradient(100deg, #7564ff, #4e9cff);
+  font-weight: bold;
+  font-size: 14px;
   transition: .3s;
 }
 
-.hero-btn:hover {
+.hero-button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 35px rgba(119,105,255,.25);
+  box-shadow: 0 8px 30px rgba(117,100,255,.3);
 }
 
 .stats {
   display: flex;
   justify-content: center;
-  gap: 75px;
+  gap: 80px;
   flex-wrap: wrap;
-  padding: 20px 7% 75px;
-}
-
-.stat {
+  padding: 35px 20px 55px;
   text-align: center;
 }
 
 .stat strong {
   display: block;
   font-size: 30px;
-  font-weight: 900;
+  color: #a99cff;
 }
 
 .stat span {
-  color: var(--muted);
+  color: #8991a6;
   font-size: 12px;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
 .tools-section {
-  padding: 45px 7% 100px;
-  max-width: 1500px;
+  padding: 45px 7% 90px;
+  max-width: 1450px;
   margin: auto;
 }
 
@@ -192,178 +150,171 @@ nav a:hover {
 }
 
 .section-heading h2 {
-  font-size: clamp(28px, 4vw, 42px);
-  font-weight: 800;
+  font-size: 34px;
+  margin-bottom: 10px;
 }
 
 .section-heading p {
-  color: var(--muted);
-  margin-top: 10px;
+  color: #8991a6;
+  font-size: 14px;
 }
 
 .search-box {
-  max-width: 570px;
-  margin: 0 auto 27px;
+  max-width: 550px;
+  margin: 0 auto 28px;
 }
 
 .search-box input {
   width: 100%;
   padding: 16px 20px;
-  background: var(--panel);
-  color: white;
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  border: 1px solid #252b40;
+  border-radius: 12px;
+  background: #111625;
+  color: #fff;
   outline: none;
   font-size: 14px;
 }
 
 .search-box input:focus {
-  border-color: var(--accent);
+  border-color: #8171ff;
+  box-shadow: 0 0 0 3px rgba(129,113,255,.12);
 }
 
 .filters {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
   gap: 10px;
+  flex-wrap: wrap;
   margin-bottom: 40px;
 }
 
-.filters button {
-  padding: 10px 17px;
-  border: 1px solid var(--border);
-  border-radius: 30px;
-  background: var(--panel);
-  color: var(--muted);
+.filter-btn {
+  padding: 9px 18px;
+  border: 1px solid #252b40;
+  border-radius: 25px;
+  background: #111625;
+  color: #aeb4c5;
   cursor: pointer;
   font-size: 13px;
-  font-weight: 600;
   transition: .3s;
 }
 
-.filters button:hover,
-.filters button.active {
-  background: linear-gradient(100deg, #8270ff, #4dcae9);
-  color: #080b14;
-  border-color: transparent;
+.filter-btn:hover,
+.filter-btn.active {
+  background: #7766ff;
+  border-color: #7766ff;
+  color: #fff;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
 }
 
 .card {
   display: block;
-  background: linear-gradient(145deg, #131c2e, #0e1422);
-  border: 1px solid var(--border);
-  border-radius: 15px;
   padding: 25px;
-  min-height: 220px;
-  transition: .3s ease;
-  position: relative;
-  overflow: hidden;
+  min-height: 205px;
+  background: linear-gradient(145deg, #141a2b, #0e1320);
+  border: 1px solid #242b40;
+  border-radius: 17px;
+  transition: .3s;
 }
 
 .card:hover {
   transform: translateY(-6px);
-  border-color: rgba(139,124,255,.6);
-  box-shadow: 0 15px 40px rgba(0,0,0,.25);
+  border-color: #7564ff;
+  box-shadow: 0 12px 35px rgba(0,0,0,.25);
 }
 
 .card-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: var(--panel2);
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 25px;
-  margin-bottom: 20px;
+  background: #202640;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 13px;
+  margin-bottom: 18px;
+  overflow: hidden;
+  color: #a99cff;
+  font-size: 23px;
+  font-weight: bold;
+}
+
+.card-icon img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  display: block;
 }
 
 .card h3 {
-  font-size: 19px;
-  font-weight: 800;
-  margin-bottom: 8px;
+  font-size: 18px;
+  margin-bottom: 7px;
 }
 
 .card p {
-  color: var(--muted);
   font-size: 13px;
-  line-height: 1.7;
-  min-height: 45px;
-}
-
-.card-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 22px;
-  gap: 8px;
+  color: #929bb0;
+  line-height: 1.6;
+  margin-bottom: 16px;
 }
 
 .category {
-  font-size: 10px;
-  color: #b9afff;
-  background: rgba(139,124,255,.12);
-  padding: 6px 10px;
+  display: inline-block;
+  color: #a99cff;
+  background: rgba(117,100,255,.12);
+  border: 1px solid rgba(117,100,255,.2);
+  padding: 4px 10px;
   border-radius: 20px;
-  font-weight: 700;
-}
-
-.visit {
-  color: var(--accent2);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: .5px;
 }
 
 .no-results {
   display: none;
   text-align: center;
-  color: var(--muted);
+  color: #929bb0;
   padding: 40px 10px;
 }
 
 .about {
-  padding: 75px 7%;
   text-align: center;
-  background: linear-gradient(180deg, transparent, rgba(139,124,255,.06));
-  border-top: 1px solid var(--border);
+  padding: 75px 20px;
+  background: linear-gradient(180deg, #0b1020, #080b14);
+  border-top: 1px solid rgba(255,255,255,.06);
 }
 
 .about h2 {
-  font-size: 32px;
+  font-size: 30px;
   margin-bottom: 15px;
 }
 
 .about p {
-  max-width: 650px;
+  max-width: 600px;
   margin: auto;
-  color: var(--muted);
+  color: #929bb0;
+  font-size: 14px;
 }
 
 footer {
-  padding: 27px 7%;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 15px;
-  color: var(--muted);
+  padding: 25px 15px;
+  text-align: center;
+  color: #747d92;
+  border-top: 1px solid rgba(255,255,255,.07);
   font-size: 12px;
 }
 
-footer strong {
-  color: white;
-}
-
-@media(max-width:600px) {
+@media (max-width: 600px) {
   header {
-    padding: 17px 5%;
+    padding: 18px 5%;
+  }
+
+  .logo {
+    font-size: 23px;
   }
 
   nav {
@@ -375,29 +326,23 @@ footer strong {
   }
 
   .hero {
-    padding: 75px 6% 55px;
-  }
-
-  .hero h1 {
-    letter-spacing: -1.5px;
+    padding: 75px 18px 55px;
   }
 
   .stats {
-    gap: 30px;
-    padding-bottom: 50px;
+    gap: 35px;
   }
 
   .tools-section {
-    padding: 35px 5% 70px;
+    padding: 35px 5% 65px;
+  }
+
+  .section-heading h2 {
+    font-size: 28px;
   }
 
   .grid {
     grid-template-columns: 1fr;
-  }
-
-  footer {
-    justify-content: center;
-    text-align: center;
   }
 }
 </style>
@@ -406,7 +351,8 @@ footer strong {
 <body>
 
 <header>
-  <a class="logo" href="#">AI <span>ONE</span></a>
+  <a href="#" class="logo">AI <span>ONE</span></a>
+
   <nav>
     <a href="#tools">Explore</a>
     <a href="#about">About</a>
@@ -421,11 +367,11 @@ footer strong {
   </h1>
 
   <p>
-    Explore leading AI tools in one place. Find the right intelligence
-    to create, work, learn and innovate.
+    Explore leading AI tools in one place.
+    Find the right intelligence to create, work, learn and innovate.
   </p>
 
-  <a href="#tools" class="hero-btn">Explore AI Tools →</a>
+  <a href="#tools" class="hero-button">Explore AI Tools</a>
 </section>
 
 <section class="stats">
@@ -449,7 +395,7 @@ footer strong {
 
   <div class="section-heading">
     <h2>Explore AI Tools</h2>
-    <p>Discover powerful tools designed to expand your possibilities.</p>
+    <p>Discover powerful tools designed to transform your ideas.</p>
   </div>
 
   <div class="search-box">
@@ -462,144 +408,105 @@ footer strong {
   </div>
 
   <div class="filters">
-    <button class="active" data-filter="All">All Tools</button>
-    <button data-filter="Writing">Writing</button>
-    <button data-filter="Images">Images</button>
-    <button data-filter="Productivity">Productivity</button>
-    <button data-filter="Coding">Coding</button>
-    <button data-filter="Video & Audio">Video & Audio</button>
+    <button class="filter-btn active" data-filter="all">All Tools</button>
+    <button class="filter-btn" data-filter="Writing">Writing</button>
+    <button class="filter-btn" data-filter="Images">Images</button>
+    <button class="filter-btn" data-filter="Productivity">Productivity</button>
+    <button class="filter-btn" data-filter="Coding">Coding</button>
+    <button class="filter-btn" data-filter="Video & Audio">Video & Audio</button>
   </div>
 
   <div class="grid" id="grid">
 
     <a class="card" data-category="Writing" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">
-      <div class="card-icon">✦</div>
+      <div class="card-icon">C</div>
       <h3>ChatGPT</h3>
-      <p>Write, learn, brainstorm and solve problems with advanced AI.</p>
-      <div class="card-bottom">
-        <span class="category">Writing</span>
-        <span class="visit">Explore ↗</span>
-      </div>
+      <p>Write, learn, brainstorm and explore new ideas with AI.</p>
+      <span class="category">WRITING</span>
     </a>
 
     <a class="card" data-category="Images" href="https://www.midjourney.com/" target="_blank" rel="noopener noreferrer">
-      <div class="card-icon">🎨</div>
+      <div class="card-icon">M</div>
       <h3>Midjourney</h3>
       <p>Transform creative ideas into stunning AI-generated images.</p>
-      <div class="card-bottom">
-        <span class="category">Images</span>
-        <span class="visit">Explore ↗</span>
-      </div>
+      <span class="category">IMAGES</span>
     </a>
 
     <a class="card" data-category="Productivity" href="https://www.notion.com/product/ai" target="_blank" rel="noopener noreferrer">
-      <div class="card-icon">◈</div>
+      <div class="card-icon">N</div>
       <h3>Notion AI</h3>
-      <p>Organize projects, manage knowledge and improve your workflow.</p>
-      <div class="card-bottom">
-        <span class="category">Productivity</span>
-        <span class="visit">Explore ↗</span>
-      </div>
+      <p>Organize your work, manage projects and boost productivity.</p>
+      <span class="category">PRODUCTIVITY</span>
     </a>
 
     <a class="card" data-category="Coding" href="https://github.com/features/copilot" target="_blank" rel="noopener noreferrer">
-      <div class="card-icon">⌘</div>
+      <div class="card-icon">G</div>
       <h3>GitHub Copilot</h3>
-      <p>Your AI coding assistant for building software faster.</p>
-      <div class="card-bottom">
-        <span class="category">Coding</span>
-        <span class="visit">Explore ↗</span>
-      </div>
+      <p>Your AI coding assistant for writing and improving code.</p>
+      <span class="category">CODING</span>
     </a>
 
     <a class="card" data-category="Writing" href="https://www.grammarly.com/" target="_blank" rel="noopener noreferrer">
-      <div class="card-icon">✍️</div>
+      <div class="card-icon">G</div>
       <h3>Grammarly</h3>
-      <p>Improve writing clarity, grammar and communication.</p>
-      <div class="card-bottom">
-        <span class="category">Writing</span>
-        <span class="visit">Explore ↗</span>
-      </div>
+      <p>Improve your writing with intelligent grammar assistance.</p>
+      <span class="category">WRITING</span>
     </a>
 
     <a class="card" data-category="Images" href="https://leonardo.ai/" target="_blank" rel="noopener noreferrer">
-      <div class="card-icon">🖼️</div>
+      <div class="card-icon">L</div>
       <h3>Leonardo AI</h3>
       <p>Create impressive digital artwork with artificial intelligence.</p>
-      <div class="card-bottom">
-        <span class="category">Images</span>
-        <span class="visit">Explore ↗</span>
-      </div>
+      <span class="category">IMAGES</span>
     </a>
 
     <a class="card" data-category="Writing" href="https://claude.ai/" target="_blank" rel="noopener noreferrer">
-      <div class="card-icon">✧</div>
+      <div class="card-icon">C</div>
       <h3>Claude</h3>
-      <p>Think, write, analyze and work through complex ideas.</p>
-      <div class="card-bottom">
-        <span class="category">Writing</span>
-        <span class="visit">Explore ↗</span>
-      </div>
+      <p>Think, write, analyze and solve problems with AI.</p>
+      <span class="category">WRITING</span>
     </a>
 
     <a class="card" data-category="Writing" href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer">
-      <div class="card-icon">✦</div>
+      <div class="card-icon">G</div>
       <h3>Google Gemini</h3>
-      <p>Explore ideas and get help with Google's powerful AI assistant.</p>
-      <div class="card-bottom">
-        <span class="category">Writing</span>
-        <span class="visit">Explore ↗</span>
-      </div>
+      <p>Explore Google's AI assistant for ideas, learning and creativity.</p>
+      <span class="category">WRITING</span>
     </a>
 
     <a class="card" data-category="Productivity" href="https://www.perplexity.ai/" target="_blank" rel="noopener noreferrer">
-      <div class="card-icon">◎</div>
+      <div class="card-icon">P</div>
       <h3>Perplexity</h3>
-      <p>Research questions and discover information with AI search.</p>
-      <div class="card-bottom">
-        <span class="category">Productivity</span>
-        <span class="visit">Explore ↗</span>
-      </div>
+      <p>Discover answers and explore information with AI-powered search.</p>
+      <span class="category">PRODUCTIVITY</span>
     </a>
 
     <a class="card" data-category="Video & Audio" href="https://runwayml.com/" target="_blank" rel="noopener noreferrer">
-      <div class="card-icon">🎬</div>
+      <div class="card-icon">R</div>
       <h3>Runway</h3>
-      <p>Explore AI-powered video creation and creative visual tools.</p>
-      <div class="card-bottom">
-        <span class="category">Video & Audio</span>
-        <span class="visit">Explore ↗</span>
-      </div>
+      <p>Explore creative AI tools for video generation and editing.</p>
+      <span class="category">VIDEO & AUDIO</span>
     </a>
 
     <a class="card" data-category="Video & Audio" href="https://elevenlabs.io/" target="_blank" rel="noopener noreferrer">
-      <div class="card-icon">🎙️</div>
+      <div class="card-icon">E</div>
       <h3>ElevenLabs</h3>
-      <p>Create realistic AI voices, speech and audio experiences.</p>
-      <div class="card-bottom">
-        <span class="category">Video & Audio</span>
-        <span class="visit">Explore ↗</span>
-      </div>
+      <p>Create natural-sounding AI voices and audio experiences.</p>
+      <span class="category">VIDEO & AUDIO</span>
     </a>
 
     <a class="card" data-category="Productivity" href="https://gamma.app/" target="_blank" rel="noopener noreferrer">
-      <div class="card-icon">▤</div>
+      <div class="card-icon">G</div>
       <h3>Gamma</h3>
       <p>Create beautiful presentations and documents with AI.</p>
-      <div class="card-bottom">
-        <span class="category">Productivity</span>
-        <span class="visit">Explore ↗</span>
-      </div>
+      <span class="category">PRODUCTIVITY</span>
     </a>
 
     <a class="card" data-category="Images" href="https://www.canva.com/" target="_blank" rel="noopener noreferrer">
-      <div class="card-icon">🌈</div>
+      <div class="card-icon">C</div>
       <h3>Canva</h3>
-      <p>Design graphics, presentations and creative content.</p>
-      <div class="card-bottom">
-        <span class="category">Images</span>
-        <span class="visit">Explore ↗</span>
-      </div>
+      <p>Design graphics, presentations and creative content easily.</p>
+      <span class="category">IMAGES</span>
     </a>
 
   </div>
@@ -614,41 +521,41 @@ footer strong {
   <h2>One Platform. Endless Possibilities.</h2>
   <p>
     AI ONE brings powerful artificial intelligence tools together
-    in one simple destination, helping everyone discover the right
-    tools to create, learn and innovate.
+    in one destination, helping everyone discover new ways to create,
+    learn and innovate.
   </p>
 </section>
 
 <footer>
-  <div class="logo">AI <span>ONE</span></div>
-  <p>© 2026 AI ONE. Discover Intelligence.</p>
+  © 2026 AI ONE. All rights reserved.
 </footer>
 
 <script>
-const filterButtons = document.querySelectorAll(".filters button");
-const cards = document.querySelectorAll(".card");
 const searchInput = document.getElementById("searchInput");
+const filterButtons = document.querySelectorAll(".filter-btn");
+const cards = document.querySelectorAll(".card");
 const noResults = document.getElementById("noResults");
 
-let activeFilter = "All";
+let activeFilter = "all";
 
 function updateTools() {
-  const searchText = searchInput.value.toLowerCase().trim();
+  const searchValue = searchInput.value.toLowerCase().trim();
   let visibleCount = 0;
 
   cards.forEach(card => {
     const category = card.dataset.category;
-    const content = card.innerText.toLowerCase();
+    const text = card.innerText.toLowerCase();
 
-    const matchesCategory =
-      activeFilter === "All" || category === activeFilter;
+    const matchesSearch = text.includes(searchValue);
+    const matchesFilter =
+      activeFilter === "all" || category === activeFilter;
 
-    const matchesSearch = content.includes(searchText);
-    const visible = matchesCategory && matchesSearch;
-
-    card.style.display = visible ? "block" : "none";
-
-    if (visible) visibleCount++;
+    if (matchesSearch && matchesFilter) {
+      card.style.display = "block";
+      visibleCount++;
+    } else {
+      card.style.display = "none";
+    }
   });
 
   noResults.style.display = visibleCount === 0 ? "block" : "none";
@@ -656,15 +563,37 @@ function updateTools() {
 
 filterButtons.forEach(button => {
   button.addEventListener("click", () => {
-    filterButtons.forEach(item => item.classList.remove("active"));
-    button.classList.add("active");
+    filterButtons.forEach(btn => btn.classList.remove("active"));
 
+    button.classList.add("active");
     activeFilter = button.dataset.filter;
+
     updateTools();
   });
 });
 
 searchInput.addEventListener("input", updateTools);
+
+// Load tool icons
+document.querySelectorAll(".card").forEach(card => {
+  const icon = card.querySelector(".card-icon");
+  const domain = new URL(card.href).hostname.replace(/^www\./, "");
+  const fallback = icon.textContent;
+
+  const image = document.createElement("img");
+
+  image.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+  image.alt = `${card.querySelector("h3").textContent} icon`;
+  image.loading = "lazy";
+
+  image.onerror = () => {
+    icon.removeChild(image);
+    icon.textContent = fallback;
+  };
+
+  icon.textContent = "";
+  icon.appendChild(image);
+});
 </script>
 
 </body>
