@@ -191,11 +191,9 @@ header{
   font-weight:bold;
 }
 
-/* SECTION */
+/* SECTIONS */
 section{padding:55px 0}
-.section-heading{
-  margin-bottom:27px;
-}
+.section-heading{margin-bottom:27px}
 .section-heading h2{
   font-size:clamp(25px,4vw,34px);
   letter-spacing:-.7px;
@@ -240,6 +238,7 @@ section{padding:55px 0}
   border-radius:50%;
   background:rgba(22,140,255,.15);
   filter:blur(35px);
+  pointer-events:none;
 }
 .featured-card:hover{
   border-color:rgba(22,140,255,.65);
@@ -251,14 +250,8 @@ section{padding:55px 0}
   font-weight:bold;
   letter-spacing:1.5px;
 }
-.featured-card h3{
-  font-size:22px;
-  margin:15px 0 7px;
-}
-.featured-card p{
-  color:var(--muted);
-  font-size:13px;
-}
+.featured-card h3{font-size:22px;margin:15px 0 7px}
+.featured-card p{color:var(--muted);font-size:13px}
 .featured-link{
   display:inline-block;
   color:var(--blue2);
@@ -268,9 +261,7 @@ section{padding:55px 0}
 }
 
 /* SEARCH */
-.explore-section{
-  border-top:1px solid var(--border);
-}
+.explore-section{border-top:1px solid var(--border)}
 .search-panel{
   padding:20px;
   border:1px solid var(--border);
@@ -293,10 +284,7 @@ section{padding:55px 0}
   border-color:var(--blue2);
   box-shadow:0 0 0 3px rgba(0,200,255,.09);
 }
-.search-icon{
-  color:var(--blue2);
-  font-size:19px;
-}
+.search-icon{color:var(--blue2);font-size:19px}
 .search-box input{
   flex:1;
   min-width:0;
@@ -330,11 +318,7 @@ section{padding:55px 0}
 }
 .filter-heading strong{font-size:12px;color:var(--silver)}
 .filter-heading span{font-size:11px;color:var(--muted)}
-.filters{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
 .filter-btn{
   border:1px solid var(--border);
   border-radius:30px;
@@ -433,6 +417,30 @@ section{padding:55px 0}
   margin-bottom:8px;
 }
 
+/* STATUS */
+.loading-state,.error-state{
+  text-align:center;
+  padding:45px 15px;
+  border:1px solid var(--border);
+  border-radius:16px;
+  color:var(--muted);
+  background:var(--panel);
+}
+.loading-state{color:var(--blue2)}
+.error-state strong{
+  display:block;
+  color:var(--silver);
+  margin-bottom:8px;
+}
+.error-state button{
+  margin-top:16px;
+  border:0;
+  border-radius:9px;
+  padding:10px 17px;
+  color:#fff;
+  background:var(--blue);
+}
+
 /* ABOUT */
 .about-box{
   padding:40px;
@@ -450,11 +458,8 @@ section{padding:55px 0}
 }
 .about-box .btn{margin-top:22px}
 
-/* DETAIL PAGE */
-.detail-wrap{
-  min-height:75vh;
-  padding:45px 0 75px;
-}
+/* DETAILS */
+.detail-wrap{min-height:75vh;padding:45px 0 75px}
 .back-link{
   display:inline-block;
   color:var(--blue2);
@@ -497,15 +502,9 @@ section{padding:55px 0}
   font-size:15px;
   margin-bottom:35px;
 }
-.detail-card h2{
-  font-size:21px;
-  margin:25px 0 10px;
-}
+.detail-card h2{font-size:21px;margin:25px 0 10px}
 .detail-card p{color:var(--muted);font-size:14px}
-.feature-list{
-  list-style:none;
-  margin-top:12px;
-}
+.feature-list{list-style:none;margin-top:12px}
 .feature-list li{
   padding:10px 0;
   border-bottom:1px solid var(--border);
@@ -603,7 +602,11 @@ footer{
   </div>
 </header>
 
-<main id="mainContent"></main>
+<main id="mainContent">
+  <div class="container" style="padding:80px 0">
+    <div class="loading-state">Loading AI ONE tools...</div>
+  </div>
+</main>
 
 <footer>
   <div class="container footer-inner">
@@ -614,347 +617,405 @@ footer{
 </footer>
 
 <script>
-const tools = [
-{
-slug:"chatgpt",name:"ChatGPT",category:"WRITING",letter:"C",
-url:"https://chatgpt.com/",
-description:"An AI assistant designed to help with writing, learning, brainstorming, problem-solving and everyday tasks.",
-about:"Discover what ChatGPT offers and explore how it can support your creative, professional or learning activities.",
-features:["Generate and improve written content","Explore ideas and explanations","Assist with learning and problem-solving"]
-},
-{
-slug:"midjourney",name:"Midjourney",category:"IMAGES",letter:"M",
-url:"https://www.midjourney.com/",
-description:"An AI image generation platform that transforms text prompts and creative ideas into visual artwork.",
-about:"Explore creative image generation and discover new ways to turn ideas into visual concepts.",
-features:["Generate images from text prompts","Explore different artistic styles","Develop creative visual concepts"]
-},
-{
-slug:"notion-ai",name:"Notion AI",category:"PRODUCTIVITY",letter:"N",
-url:"https://www.notion.com/product/ai",
-description:"AI features integrated into Notion to help organize information, write content and manage work.",
-about:"Discover AI-powered tools designed to support organization, writing and everyday productivity.",
-features:["Summarize and organize information","Improve writing and documentation","Support productivity workflows"]
-},
-{
-slug:"github-copilot",name:"GitHub Copilot",category:"CODING",letter:"G",
-url:"https://github.com/features/copilot",
-description:"An AI coding assistant that helps developers write, understand and improve software code.",
-about:"Explore AI assistance for software development, coding workflows and understanding code.",
-features:["Suggest code while you work","Explain and understand code","Support software development tasks"]
-},
-{
-slug:"grammarly",name:"Grammarly",category:"WRITING",letter:"G",
-url:"https://www.grammarly.com/",
-description:"A writing assistant that helps improve clarity, correctness and communication.",
-about:"Discover tools that help make written communication clearer and more effective.",
-features:["Check grammar and spelling","Improve clarity and tone","Support effective communication"]
-},
-{
-slug:"leonardo-ai",name:"Leonardo AI",category:"IMAGES",letter:"L",
-url:"https://leonardo.ai/",
-description:"A creative AI platform for generating images and developing visual concepts.",
-about:"Explore creative tools for visual generation, design exploration and artistic ideas.",
-features:["Generate creative images","Explore visual styles","Develop visual concepts"]
-},
-{
-slug:"claude",name:"Claude",category:"WRITING",letter:"C",
-url:"https://claude.ai/",
-description:"An AI assistant for writing, analysis, reasoning, learning and working with information.",
-about:"Discover an AI assistant that can help explore ideas, understand information and work through tasks.",
-features:["Assist with writing and analysis","Explain complex information","Support reasoning and learning"]
-},
-{
-slug:"gemini",name:"Google Gemini",category:"WRITING",letter:"G",
-url:"https://gemini.google.com/",
-description:"Google's AI assistant for exploring ideas, understanding information and supporting creative tasks.",
-about:"Explore Google's AI assistant and its capabilities for learning, creativity and everyday tasks.",
-features:["Explore ideas and information","Support creative tasks","Assist with learning and productivity"]
-},
-{
-slug:"perplexity",name:"Perplexity",category:"RESEARCH",letter:"P",
-url:"https://www.perplexity.ai/",
-description:"An AI-powered answer and search platform for exploring questions and discovering information.",
-about:"Discover an AI-powered research and answer experience for exploring topics and finding information.",
-features:["Explore questions and topics","Discover relevant information","Support research and learning"]
-},
-{
-slug:"runway",name:"Runway",category:"VIDEO & AUDIO",letter:"R",
-url:"https://runwayml.com/",
-description:"A creative platform offering AI-powered tools for video generation and visual production.",
-about:"Explore AI-powered creative tools for video and visual storytelling.",
-features:["Explore AI video tools","Develop visual content","Support creative production"]
-},
-{
-slug:"elevenlabs",name:"ElevenLabs",category:"VIDEO & AUDIO",letter:"E",
-url:"https://elevenlabs.io/",
-description:"An AI audio platform focused on voice generation and audio experiences.",
-about:"Discover AI audio tools and explore voice technology for creative projects.",
-features:["Explore AI voice generation","Create audio experiences","Support audio projects"]
-},
-{
-slug:"gamma",name:"Gamma",category:"PRODUCTIVITY",letter:"G",
-url:"https://gamma.app/",
-description:"A platform that helps create presentations, documents and visual content with AI.",
-about:"Explore ways to create and communicate ideas through AI-assisted presentations and documents.",
-features:["Create presentations","Develop documents","Organize visual content"]
-},
-{
-slug:"canva",name:"Canva",category:"IMAGES",letter:"C",
-url:"https://www.canva.com/",
-description:"A visual design platform with tools for creating graphics, presentations and digital content.",
-about:"Discover creative design tools for visual communication and digital projects.",
-features:["Create graphics and designs","Build presentations","Develop digital content"]
-},
-{
-slug:"zapier-ai",name:"Zapier AI",category:"BUSINESS",letter:"Z",
-url:"https://zapier.com/ai",
-description:"AI and automation features that help connect apps and organize workflows.",
-about:"Explore automation tools designed to connect applications and simplify repetitive workflows.",
-features:["Connect different applications","Automate workflows","Organize everyday tasks"]
-},
-{
-slug:"hubspot-ai",name:"HubSpot AI",category:"MARKETING",letter:"H",
-url:"https://www.hubspot.com/products/artificial-intelligence",
-description:"AI features across HubSpot products for marketing, sales and customer support workflows.",
-about:"Discover AI-powered features designed to support marketing, sales and customer relationships.",
-features:["Support marketing workflows","Assist sales activities","Improve customer support processes"]
-},
-{
-slug:"khanmigo",name:"Khanmigo",category:"EDUCATION",letter:"K",
-url:"https://www.khanmigo.ai/",
-description:"An AI-powered learning assistant from Khan Academy designed to support learning and teaching.",
-about:"Explore an AI learning assistant designed to support students and educators.",
-features:["Support learning activities","Explore educational topics","Assist teaching and learning"]
-},
-{
-slug:"elicit",name:"Elicit",category:"RESEARCH",letter:"E",
-url:"https://elicit.com/",
-description:"An AI research assistant that helps explore academic literature and research information.",
-about:"Discover tools designed to support literature exploration and research workflows.",
-features:["Explore academic literature","Organize research information","Support evidence discovery"]
+"use strict";
+
+/*
+  AI ONE
+  Public tools are loaded from the Cloudflare D1 API.
+  API endpoint: /api/tools
+*/
+
+const API_URL = "/api/tools";
+const main = document.getElementById("mainContent");
+const params = new URLSearchParams(window.location.search);
+const selectedTool = params.get("tool");
+
+let tools = [];
+let activeCategory = "ALL";
+
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[character]);
 }
-];
 
-const categories=[
-"ALL","WRITING","IMAGES","PRODUCTIVITY","CODING",
-"VIDEO & AUDIO","BUSINESS","MARKETING","EDUCATION","RESEARCH"
-];
+function safeURL(value){
+  try{
+    const url = new URL(String(value || ""));
+    if(url.protocol === "https:" || url.protocol === "http:"){
+      return url.href;
+    }
+  }catch(error){}
+  return "#";
+}
 
-const main=document.getElementById("mainContent");
-const params=new URLSearchParams(window.location.search);
-const selectedTool=params.get("tool");
+function normalizeTool(tool){
+  const features = Array.isArray(tool.features)
+    ? tool.features
+    : [];
+
+  return {
+    id: String(tool.id || tool.slug || ""),
+    slug: String(tool.slug || tool.id || ""),
+    name: String(tool.name || "Unnamed Tool"),
+    category: String(tool.category || "OTHER").toUpperCase(),
+    letter: String(tool.letter || tool.name?.charAt(0) || "A").charAt(0).toUpperCase(),
+    url: safeURL(tool.url),
+    description: String(tool.description || ""),
+    about: String(tool.about || tool.description || ""),
+    features: features.map(item => String(item)),
+    featured: tool.featured === true || tool.featured === 1,
+    status: String(tool.status || "active")
+  };
+}
+
+function showLoading(){
+  main.innerHTML = `
+    <div class="container" style="padding:80px 0">
+      <div class="loading-state">Loading AI ONE tools...</div>
+    </div>
+  `;
+}
+
+function showLoadError(){
+  main.innerHTML = `
+    <div class="container" style="padding:80px 0">
+      <div class="error-state">
+        <strong>Unable to load AI ONE tools</strong>
+        <p>We could not connect to the tools database. Please try again.</p>
+        <button type="button" id="retryLoad">Try Again</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("retryLoad").addEventListener("click", loadTools);
+}
+
+async function loadTools(){
+  showLoading();
+
+  try{
+    const response = await fetch(API_URL, {
+      method:"GET",
+      cache:"no-store",
+      headers:{
+        "Accept":"application/json"
+      }
+    });
+
+    if(!response.ok){
+      throw new Error("API request failed: " + response.status);
+    }
+
+    const data = await response.json();
+
+    if(data.success !== true || !Array.isArray(data.tools)){
+      throw new Error("Invalid tools API response");
+    }
+
+    tools = data.tools
+      .map(normalizeTool)
+      .filter(tool => tool.status === "active");
+
+    if(selectedTool){
+      renderDetails(selectedTool);
+    }else{
+      renderHome();
+    }
+
+  }catch(error){
+    console.error("AI ONE loading error:", error);
+    showLoadError();
+  }
+}
+
+function getCategories(){
+  return [
+    "ALL",
+    ...new Set(
+      tools
+        .map(tool => tool.category)
+        .filter(Boolean)
+        .sort()
+    )
+  ];
+}
 
 function renderHome(){
-document.title="AI ONE — Discover Intelligence";
+  document.title = "AI ONE — Discover Intelligence";
 
-main.innerHTML=`
-<section class="hero">
- <div class="container">
-  <div class="eyebrow">✦ THE FUTURE OF INTELLIGENCE</div>
-  <h1>One Destination.<br><span class="gradient-text">Endless AI Possibilities.</span></h1>
-  <p>Discover powerful artificial intelligence tools that help you create, work, learn and innovate.</p>
-  <div class="hero-actions">
-   <a class="btn btn-primary" href="#tools">Explore AI Tools →</a>
-   <a class="btn btn-secondary" href="#featured">Discover Featured</a>
-  </div>
-  <div class="stats">
-   <div class="stat"><strong>17</strong><span>AI TOOLS</span></div>
-   <div class="stat"><strong>09</strong><span>CATEGORIES</span></div>
-   <div class="stat"><strong>01</strong><span>DESTINATION</span></div>
-  </div>
- </div>
-</section>
+  const categories = getCategories();
+  const categoryCount = categories.length - 1;
+  const featuredTools = tools.filter(tool => tool.featured);
 
-<section id="featured">
- <div class="container">
-  <div class="section-heading">
-   <div class="section-label">HANDPICKED FOR YOU</div>
-   <h2>Featured AI Tools</h2>
-   <p>Explore some exciting tools in artificial intelligence.</p>
-  </div>
-  <div class="featured-grid" id="featuredGrid"></div>
- </div>
-</section>
+  main.innerHTML = `
+    <section class="hero">
+      <div class="container">
+        <div class="eyebrow">✦ THE FUTURE OF INTELLIGENCE</div>
+        <h1>One Destination.<br><span class="gradient-text">Endless AI Possibilities.</span></h1>
+        <p>Discover powerful artificial intelligence tools that help you create, work, learn and innovate.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#tools">Explore AI Tools →</a>
+          <a class="btn btn-secondary" href="#featured">Discover Featured</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><strong>${tools.length}</strong><span>AI TOOLS</span></div>
+          <div class="stat"><strong>${String(categoryCount).padStart(2,"0")}</strong><span>CATEGORIES</span></div>
+          <div class="stat"><strong>01</strong><span>DESTINATION</span></div>
+        </div>
+      </div>
+    </section>
 
-<section class="explore-section" id="tools">
- <div class="container">
-  <div class="section-heading">
-   <div class="section-label">EXPLORE THE COLLECTION</div>
-   <h2>Explore AI Tools</h2>
-   <p>Find the right AI tool for your next idea.</p>
-  </div>
+    <section id="featured">
+      <div class="container">
+        <div class="section-heading">
+          <div class="section-label">HANDPICKED FOR YOU</div>
+          <h2>Featured AI Tools</h2>
+          <p>Explore some exciting tools in artificial intelligence.</p>
+        </div>
+        <div class="featured-grid" id="featuredGrid"></div>
+      </div>
+    </section>
 
-  <div class="search-panel">
-   <div class="search-box">
-    <span class="search-icon">⌕</span>
-    <input id="searchInput" type="search" placeholder="Search AI tools, categories or features..." autocomplete="off" aria-label="Search AI tools">
-    <button class="clear-search" id="clearSearch" aria-label="Clear search">×</button>
-   </div>
-   <div class="search-hint">Search by tool name, category or what you want to do.</div>
-   <div class="filter-heading">
-    <strong>Browse by category</strong>
-    <span>Choose a category</span>
-   </div>
-   <div class="filters" id="filters"></div>
-  </div>
+    <section class="explore-section" id="tools">
+      <div class="container">
+        <div class="section-heading">
+          <div class="section-label">EXPLORE THE COLLECTION</div>
+          <h2>Explore AI Tools</h2>
+          <p>Find the right AI tool for your next idea.</p>
+        </div>
 
-  <div class="results-line">
-   <span id="resultsCount">Showing 17 tools</span>
-   <span>AI ONE COLLECTION</span>
-  </div>
-  <div class="tools-grid" id="toolsGrid"></div>
-  <div class="no-results" id="noResults">
-   <strong>No tools found</strong>
-   Try another search term or choose a different category.
-  </div>
- </div>
-</section>
+        <div class="search-panel">
+          <div class="search-box">
+            <span class="search-icon">⌕</span>
+            <input
+              id="searchInput"
+              type="search"
+              placeholder="Search AI tools, categories or features..."
+              autocomplete="off"
+              aria-label="Search AI tools"
+            >
+            <button class="clear-search" id="clearSearch" type="button" aria-label="Clear search">×</button>
+          </div>
 
-<section id="about">
- <div class="container">
-  <div class="about-box">
-   <div class="section-label">ABOUT AI ONE</div>
-   <h2>One Platform. Endless Possibilities.</h2>
-   <p>AI ONE brings powerful artificial intelligence tools together in one destination, helping everyone discover new ways to create, learn, work and innovate.</p>
-   <a href="#tools" class="btn btn-primary">Explore the Collection →</a>
-  </div>
- </div>
-</section>
-`;
+          <div class="search-hint">Search by tool name, category or what you want to do.</div>
 
-const featuredSlugs=["chatgpt","claude","gemini"];
-document.getElementById("featuredGrid").innerHTML=featuredSlugs.map(slug=>{
- const t=tools.find(x=>x.slug===slug);
- return `
- <a class="featured-card" href="?tool=${t.slug}">
-  <span class="featured-tag">✦ FEATURED TOOL</span>
-  <h3>${t.name}</h3>
-  <p>${t.description}</p>
-  <span class="featured-link">Explore ${t.name} →</span>
- </a>`;
-}).join("");
+          <div class="filter-heading">
+            <strong>Browse by category</strong>
+            <span>Choose a category</span>
+          </div>
 
-document.getElementById("filters").innerHTML=categories.map((c,i)=>
- `<button class="filter-btn ${i===0?"active":""}" data-filter="${c}">${c==="ALL"?"All Tools":c}</button>`
-).join("");
+          <div class="filters" id="filters"></div>
+        </div>
 
-let activeCategory="ALL";
-const searchInput=document.getElementById("searchInput");
-const clearButton=document.getElementById("clearSearch");
+        <div class="results-line">
+          <span id="resultsCount">Showing ${tools.length} tools</span>
+          <span>AI ONE COLLECTION</span>
+        </div>
 
-function updateTools(){
- const query=searchInput.value.trim().toLowerCase();
- clearButton.classList.toggle("show",query.length>0);
+        <div class="tools-grid" id="toolsGrid"></div>
 
- const filtered=tools.filter(t=>{
-  const categoryMatch=activeCategory==="ALL"||t.category===activeCategory;
-  const searchable=[t.name,t.category,t.description,t.about,...t.features].join(" ").toLowerCase();
-  return categoryMatch&&searchable.includes(query);
- });
+        <div class="no-results" id="noResults">
+          <strong>No tools found</strong>
+          Try another search term or choose a different category.
+        </div>
+      </div>
+    </section>
 
- document.getElementById("toolsGrid").innerHTML=filtered.map(t=>`
-  <a class="tool-card" href="?tool=${t.slug}">
-   <div class="tool-top">
-    <div class="tool-icon">${t.letter}</div>
-    <span class="tool-category">${t.category}</span>
-   </div>
-   <h3>${t.name}</h3>
-   <p>${t.description}</p>
-   <span class="card-link">Explore ${t.name} →</span>
-  </a>
- `).join("");
+    <section id="about">
+      <div class="container">
+        <div class="about-box">
+          <div class="section-label">ABOUT AI ONE</div>
+          <h2>One Platform. Endless Possibilities.</h2>
+          <p>AI ONE brings powerful artificial intelligence tools together in one destination, helping everyone discover new ways to create, learn, work and innovate.</p>
+          <a href="#tools" class="btn btn-primary">Explore the Collection →</a>
+        </div>
+      </div>
+    </section>
+  `;
 
- document.getElementById("resultsCount").innerHTML=
-  `Showing <strong>${filtered.length}</strong> of 17 tools`;
+  const featuredGrid = document.getElementById("featuredGrid");
 
- document.getElementById("noResults").style.display=
-  filtered.length===0?"block":"none";
- document.getElementById("toolsGrid").style.display=
-  filtered.length===0?"none":"grid";
+  featuredGrid.innerHTML = featuredTools.length
+    ? featuredTools.map(tool => `
+        <a class="featured-card" href="?tool=${encodeURIComponent(tool.slug)}">
+          <span class="featured-tag">✦ FEATURED TOOL</span>
+          <h3>${escapeHTML(tool.name)}</h3>
+          <p>${escapeHTML(tool.description)}</p>
+          <span class="featured-link">Explore ${escapeHTML(tool.name)} →</span>
+        </a>
+      `).join("")
+    : `<p style="color:var(--muted)">Featured tools will appear here.</p>`;
+
+  document.getElementById("filters").innerHTML = categories.map((category,index) => `
+    <button
+      type="button"
+      class="filter-btn ${index === 0 ? "active" : ""}"
+      data-filter="${escapeHTML(category)}"
+    >${category === "ALL" ? "All Tools" : escapeHTML(category)}</button>
+  `).join("");
+
+  activeCategory = "ALL";
+
+  const searchInput = document.getElementById("searchInput");
+  const clearButton = document.getElementById("clearSearch");
+
+  function updateTools(){
+    const query = searchInput.value.trim().toLowerCase();
+
+    clearButton.classList.toggle("show", query.length > 0);
+
+    const filtered = tools.filter(tool => {
+      const categoryMatch =
+        activeCategory === "ALL" || tool.category === activeCategory;
+
+      const searchable = [
+        tool.name,
+        tool.category,
+        tool.description,
+        tool.about,
+        ...tool.features
+      ].join(" ").toLowerCase();
+
+      return categoryMatch && searchable.includes(query);
+    });
+
+    document.getElementById("toolsGrid").innerHTML = filtered.map(tool => `
+      <a class="tool-card" href="?tool=${encodeURIComponent(tool.slug)}">
+        <div class="tool-top">
+          <div class="tool-icon">${escapeHTML(tool.letter)}</div>
+          <span class="tool-category">${escapeHTML(tool.category)}</span>
+        </div>
+        <h3>${escapeHTML(tool.name)}</h3>
+        <p>${escapeHTML(tool.description)}</p>
+        <span class="card-link">Explore ${escapeHTML(tool.name)} →</span>
+      </a>
+    `).join("");
+
+    document.getElementById("resultsCount").innerHTML =
+      `Showing <strong>${filtered.length}</strong> of ${tools.length} tools`;
+
+    document.getElementById("noResults").style.display =
+      filtered.length === 0 ? "block" : "none";
+
+    document.getElementById("toolsGrid").style.display =
+      filtered.length === 0 ? "none" : "grid";
+  }
+
+  searchInput.addEventListener("input", updateTools);
+
+  clearButton.addEventListener("click", () => {
+    searchInput.value = "";
+    updateTools();
+    searchInput.focus();
+  });
+
+  document.getElementById("filters").addEventListener("click", event => {
+    const button = event.target.closest(".filter-btn");
+    if(!button) return;
+
+    activeCategory = button.dataset.filter;
+
+    document.querySelectorAll(".filter-btn").forEach(item => {
+      item.classList.toggle("active", item === button);
+    });
+
+    updateTools();
+  });
+
+  document.addEventListener("keydown", handleSearchKeyboard);
+
+  updateTools();
 }
 
-searchInput.addEventListener("input",updateTools);
+function handleSearchKeyboard(event){
+  const searchInput = document.getElementById("searchInput");
 
-clearButton.addEventListener("click",()=>{
- searchInput.value="";
- updateTools();
- searchInput.focus();
-});
+  if(!searchInput) return;
 
-document.getElementById("filters").addEventListener("click",e=>{
- const button=e.target.closest(".filter-btn");
- if(!button)return;
- activeCategory=button.dataset.filter;
- document.querySelectorAll(".filter-btn").forEach(b=>
-  b.classList.toggle("active",b===button)
- );
- updateTools();
-});
+  if(event.key === "/" && document.activeElement !== searchInput){
+    event.preventDefault();
+    searchInput.focus();
+  }
 
-document.addEventListener("keydown",e=>{
- if(e.key==="/"&&document.activeElement!==searchInput){
-  e.preventDefault();
-  searchInput.focus();
- }
- if(e.key==="Escape"&&document.activeElement===searchInput){
-  searchInput.value="";
-  updateTools();
-  searchInput.blur();
- }
-});
-
-updateTools();
+  if(event.key === "Escape" && document.activeElement === searchInput){
+    searchInput.value = "";
+    searchInput.dispatchEvent(new Event("input"));
+    searchInput.blur();
+  }
 }
 
 function renderDetails(slug){
- const t=tools.find(x=>x.slug===slug);
+  const tool = tools.find(item => item.slug === slug);
 
- if(!t){
-  document.title="Tool Not Found — AI ONE";
-  main.innerHTML=`
-   <div class="container not-found">
-    <h1>Tool Not Found</h1>
-    <p style="color:var(--muted);margin:12px 0 25px">The tool you are looking for could not be found.</p>
-    <a class="btn btn-primary" href="./">Back to AI ONE</a>
-   </div>`;
-  return;
- }
+  if(!tool){
+    document.title = "Tool Not Found — AI ONE";
 
- document.title=t.name+" — AI ONE";
+    main.innerHTML = `
+      <div class="container not-found">
+        <h1>Tool Not Found</h1>
+        <p style="color:var(--muted);margin:12px 0 25px">
+          The tool you are looking for could not be found.
+        </p>
+        <a class="btn btn-primary" href="./">Back to AI ONE</a>
+      </div>
+    `;
+    return;
+  }
 
- main.innerHTML=`
- <section class="detail-wrap">
-  <div class="container">
-   <a class="back-link" href="./">← Back to All AI Tools</a>
-   <article class="detail-card">
-    <div class="detail-icon">${t.letter}</div>
-    <div class="detail-category">${t.category}</div>
-    <h1>${t.name}</h1>
-    <p class="detail-description">${t.description}</p>
+  document.title = tool.name + " — AI ONE";
 
-    <h2>About ${t.name}</h2>
-    <p>${t.about}</p>
+  const featuresHTML = tool.features.length
+    ? tool.features.map(feature => `
+        <li>${escapeHTML(feature)}</li>
+      `).join("")
+    : `<li>Explore the official website for more information.</li>`;
 
-    <h2>Key Features</h2>
-    <ul class="feature-list">
-     ${t.features.map(feature=>`<li>${feature}</li>`).join("")}
-    </ul>
+  const website = safeURL(tool.url);
 
-    <div class="detail-actions">
-     <a class="btn btn-primary" href="${t.url}" target="_blank" rel="noopener noreferrer">Visit Official Website ↗</a>
-     <a class="btn btn-secondary" href="./">Explore More Tools</a>
-    </div>
-   </article>
-  </div>
- </section>`;
+  main.innerHTML = `
+    <section class="detail-wrap">
+      <div class="container">
+        <a class="back-link" href="./">← Back to All AI Tools</a>
+
+        <article class="detail-card">
+          <div class="detail-icon">${escapeHTML(tool.letter)}</div>
+
+          <div class="detail-category">${escapeHTML(tool.category)}</div>
+
+          <h1>${escapeHTML(tool.name)}</h1>
+
+          <p class="detail-description">${escapeHTML(tool.description)}</p>
+
+          <h2>About ${escapeHTML(tool.name)}</h2>
+          <p>${escapeHTML(tool.about)}</p>
+
+          <h2>Key Features</h2>
+          <ul class="feature-list">${featuresHTML}</ul>
+
+          <div class="detail-actions">
+            <a
+              class="btn btn-primary"
+              href="${escapeHTML(website)}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Visit Official Website ↗</a>
+
+            <a class="btn btn-secondary" href="./">Explore More Tools</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  `;
 }
 
-if(selectedTool){
- renderDetails(selectedTool);
-}else{
- renderHome();
-}
+/* START THE APPLICATION */
+loadTools();
+
 </script>
 </body>
 </html>
