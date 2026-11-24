@@ -2,323 +2,982 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#070b12">
-  <meta name="robots" content="noindex, nofollow">
-  <title>AI ONE | Admin Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#070b12">
+<meta name="robots" content="noindex, nofollow">
+<title>AI ONE | Admin Dashboard</title>
 
-  <style>
-    * { box-sizing: border-box; }
+<style>
+*{box-sizing:border-box}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      color: #dce6f2;
-      background: #070b12;
-    }
+:root{
+  --bg:#070b12;
+  --panel:#0d1420;
+  --panel2:#111c2b;
+  --blue:#168cff;
+  --cyan:#00c8ff;
+  --text:#dce6f2;
+  --muted:#91a4ba;
+  --border:#203750;
+  --green:#55dfad;
+  --red:#ff7777;
+}
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 22px 6%;
-      border-bottom: 1px solid #203750;
-      background: #0d1420;
-    }
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,sans-serif;
+  color:var(--text);
+  background:var(--bg);
+}
 
-    .logo {
-      font-size: 25px;
-      font-weight: 800;
-      letter-spacing: 3px;
-      color: #168cff;
-    }
+button,input,select,textarea{font:inherit}
 
-    button {
-      padding: 11px 20px;
-      border: 1px solid #168cff;
-      border-radius: 8px;
-      background: transparent;
-      color: #168cff;
-      cursor: pointer;
-      font-weight: bold;
-    }
+button{
+  padding:11px 17px;
+  border:1px solid var(--blue);
+  border-radius:8px;
+  background:transparent;
+  color:var(--blue);
+  cursor:pointer;
+  font-weight:bold;
+}
 
-    button:hover:not(:disabled) {
-      background: #168cff;
-      color: white;
-    }
+button:hover:not(:disabled){
+  background:var(--blue);
+  color:white;
+}
 
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
 
-    main {
-      width: 90%;
-      max-width: 1050px;
-      margin: 55px auto;
-    }
+.primary{
+  background:var(--blue);
+  color:white;
+}
 
-    .welcome {
-      padding: 35px;
-      border: 1px solid #203750;
-      border-radius: 15px;
-      background: #0d1420;
-    }
+.danger{
+  border-color:var(--red);
+  color:var(--red);
+}
 
-    h1 {
-      margin-top: 0;
-      font-size: 30px;
-    }
+.danger:hover:not(:disabled){
+  background:var(--red);
+  color:white;
+}
 
-    .blue { color: #168cff; }
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding:20px 6%;
+  border-bottom:1px solid var(--border);
+  background:var(--panel);
+}
 
-    .status {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 9px 14px;
-      border-radius: 7px;
-      background: #102d25;
-      color: #55dfad;
-      font-size: 13px;
-    }
+.logo{
+  font-size:25px;
+  font-weight:800;
+  letter-spacing:3px;
+  color:var(--blue);
+}
 
-    .info {
-      margin-top: 25px;
-      padding: 25px;
-      border: 1px solid #203750;
-      border-radius: 12px;
-      background: #0d1420;
-    }
+.header-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
 
-    .info p {
-      color: #91a4ba;
-      line-height: 1.7;
-    }
+main{
+  width:92%;
+  max-width:1250px;
+  margin:38px auto;
+}
 
-    .import-button {
-      margin-top: 12px;
-      padding: 14px 22px;
-      background: #168cff;
-      color: white;
-      border: 1px solid #168cff;
-      font-size: 15px;
-    }
+.welcome,.panel,.stat-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:13px;
+}
 
-    #importMessage {
-      margin-top: 18px;
-      line-height: 1.7;
-      overflow-wrap: anywhere;
-    }
+.welcome{
+  padding:28px;
+  margin-bottom:22px;
+}
 
-    .success-message { color: #55dfad; }
-    .error-message { color: #ff7777; }
-    .neutral-message { color: #91a4ba; }
+h1{margin:0 0 10px;font-size:29px}
+h2{font-size:20px;margin:0 0 15px}
+.blue{color:var(--blue)}
 
-    #loading {
-      text-align: center;
-      margin-top: 100px;
-      color: #168cff;
-    }
+.muted{color:var(--muted);line-height:1.6}
 
-    #error {
-      display: none;
-      text-align: center;
-      margin: 100px 20px;
-      color: #ff7777;
-    }
+.status{
+  display:inline-block;
+  margin-top:10px;
+  padding:8px 12px;
+  border-radius:7px;
+  background:#102d25;
+  color:var(--green);
+  font-size:13px;
+}
 
-    [hidden] { display: none !important; }
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin:22px 0;
+}
 
-    @media (max-width: 600px) {
-      header { padding: 18px 5%; }
-      h1 { font-size: 24px; }
-      .welcome { padding: 24px; }
-      .import-button { width: 100%; }
-    }
-  </style>
+.stat-card{padding:20px}
+
+.stat-card span{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:10px;
+}
+
+.stat-card strong{
+  font-size:30px;
+  color:var(--blue);
+}
+
+.panel{
+  padding:23px;
+  margin-bottom:22px;
+}
+
+.toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+
+.filters{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:12px;
+  color:var(--text);
+  background:#070f1a;
+  border:1px solid var(--border);
+  border-radius:8px;
+  outline:none;
+}
+
+input:focus,select:focus,textarea:focus{
+  border-color:var(--blue);
+}
+
+.filters input{min-width:220px;width:auto}
+.filters select{width:auto;min-width:155px}
+
+.tool-list{
+  display:grid;
+  gap:12px;
+}
+
+.tool{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding:17px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--panel2);
+}
+
+.tool-info{min-width:0;flex:1}
+
+.tool-info h3{
+  margin:0 0 7px;
+  font-size:17px;
+  overflow-wrap:anywhere;
+}
+
+.tool-info p{
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+
+.tool-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:9px;
+}
+
+.tag{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:6px;
+  background:#102b46;
+  color:#8ecaff;
+  font-size:11px;
+}
+
+.tag.inactive{
+  background:#382126;
+  color:#ff9999;
+}
+
+.tag.featured{
+  background:#332b18;
+  color:#ffd77b;
+}
+
+.tool-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.tool-actions button{
+  padding:9px 12px;
+  font-size:12px;
+}
+
+.empty,.loading{
+  padding:35px 15px;
+  text-align:center;
+  color:var(--muted);
+}
+
+.message{
+  margin-top:15px;
+  padding:12px;
+  border-radius:8px;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+
+.success-message{background:#102d25;color:var(--green)}
+.error-message{background:#351d23;color:var(--red)}
+.neutral-message{background:#102b46;color:#9bcfff}
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:10;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,0,0,.8);
+}
+
+.modal.open{display:flex}
+
+.modal-box{
+  width:100%;
+  max-width:650px;
+  max-height:90vh;
+  overflow-y:auto;
+  padding:25px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:var(--panel);
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.field{margin-bottom:15px}
+
+.field label{
+  display:block;
+  margin-bottom:7px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.field textarea{
+  min-height:85px;
+  resize:vertical;
+}
+
+.checks{
+  display:flex;
+  gap:22px;
+  flex-wrap:wrap;
+  margin:15px 0;
+}
+
+.checks label{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--text);
+  font-size:14px;
+}
+
+.checks input{width:auto}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:20px;
+}
+
+#loading,#error{
+  text-align:center;
+  margin:100px 20px;
+  color:var(--blue);
+}
+
+#error{display:none;color:var(--red)}
+[hidden]{display:none!important}
+
+@media(max-width:700px){
+  header{padding:17px 4%}
+  main{width:94%;margin:24px auto}
+  .stats{grid-template-columns:1fr 1fr}
+  .tool{align-items:flex-start;flex-direction:column}
+  .tool-actions{width:100%}
+  .tool-actions button{flex:1}
+  .form-grid{grid-template-columns:1fr}
+  .filters{width:100%}
+  .filters input,.filters select{width:100%}
+  .welcome{padding:22px}
+  h1{font-size:24px}
+  .header-actions button{padding:9px}
+}
+
+@media(max-width:380px){
+  .stats{grid-template-columns:1fr}
+}
+</style>
 </head>
 
 <body>
 
-  <div id="loading">Verifying administrator session...</div>
+<div id="loading">Verifying administrator session...</div>
 
-  <div id="error" role="alert">
-    <h2>Access denied</h2>
-    <p>Your administrator session is not valid.</p>
-    <p>Redirecting to login...</p>
+<div id="error" role="alert">
+  <h2>Access denied</h2>
+  <p>Your administrator session is not valid.</p  >
+  <p>Redirecting to login...</p>
+</div>
+
+<div id="dashboard" hidden>
+
+<header>
+  <div class="logo">AI ONE</div>
+  <div class="header-actions">
+    <button id="refreshButton" type="button">Refresh</button>
+    <button id="logoutButton" type="button">Sign Out</button>
+  </div>
+</header>
+
+<main>
+
+<section class="welcome">
+  <h1>Welcome to <span class="blue">AI ONE</span></h1>
+  <p class="muted">Administrator Dashboard</p>
+  <span class="status">Administrator authenticated</span>
+</section>
+
+<section class="stats">
+  <div class="stat-card">
+    <span>Total Tools</span>
+    <strong id="totalCount">0</strong>
+  </div>
+  <div class="stat-card">
+    <span>Active Tools</span>
+    <strong id="activeCount">0</strong>
+  </div>
+  <div class="stat-card">
+    <span>Featured Tools</span>
+    <strong id="featuredCount">0</strong>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="toolbar">
+    <div>
+      <h2>AI Tools Management</h2>
+      <p class="muted">Manage your AI ONE collection.</p>
+    </div>
+    <button class="primary" id="addButton" type="button">
+      + Add New Tool
+    </button>
   </div>
 
-  <div id="dashboard" hidden>
+  <div class="toolbar">
+    <div class="filters">
+      <input
+        id="searchInput"
+        type="search"
+        placeholder="Search tools..."
+        aria-label="Search tools"
+      >
 
-    <header>
-      <div class="logo">AI ONE</div>
-      <button id="logoutButton" type="button">
-        Sign Out
-      </button>
-    </header>
+      <select id="categoryFilter" aria-label="Filter category">
+        <option value="">All Categories</option>
+      </select>
 
-    <main>
-      <section class="welcome">
-        <h1>Welcome to <span class="blue">AI ONE</span></h1>
-        <p>Administrator Dashboard</p>
-        <div class="status">
-          Administrator authenticated
+      <select id="statusFilter" aria-label="Filter status">
+        <option value="">All Statuses</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+
+    <span class="muted" id="resultsCount">0 tools</span>
+  </div>
+
+  <div id="toolsMessage" role="status" aria-live="polite"></div>
+  <div id="toolList" class="tool-list">
+    <div class="loading">Loading tools...</div>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Platform Overview</h2>
+  <p class="muted">
+    Your AI ONE administration system is connected to
+    the database and protected by administrator authentication.
+  </p>
+
+  <button id="importButton" class="primary" type="button">
+    Import 17 AI Tools
+  </button>
+
+  <div id="importMessage" role="status" aria-live="polite"></div>
+</section>
+
+</main>
+</div>
+
+<div class="modal" id="toolModal" role="dialog"
+     aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-box">
+    <h2 id="modalTitle">Add New Tool</h2>
+    <p class="muted">Enter the tool information below.</p>
+
+    <form id="toolForm">
+
+      <input type="hidden" id="toolId">
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="name">Tool Name *</label>
+          <input id="name" required maxlength="120">
         </div>
-      </section>
 
-      <section class="info">
-        <h2>Platform Overview</h2>
-        <p>
-          Your administrator dashboard is connected
-          to the AI ONE authentication system.
-        </p>
-        <p>
-          Secure administrator access is active.
-        </p>
-      </section>
+        <div class="field">
+          <label for="category">Category *</label>
+          <input id="category" required maxlength="60"
+                 placeholder="WRITING">
+        </div>
 
-      <section class="info">
-        <h2>AI Tools Management</h2>
-        <p>
-          Import the initial collection of 17 AI tools
-          into the AI ONE database.
-        </p>
+        <div class="field">
+          <label for="slug">Slug</label>
+          <input id="slug" maxlength="150"
+                 placeholder="tool-name">
+        </div>
 
-        <button
-          id="importButton"
-          class="import-button"
-          type="button"
-        >
-          Import 17 AI Tools
+        <div class="field">
+          <label for="letter">Display Letter</label>
+          <input id="letter" maxlength="5">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="url">Official Website URL</label>
+        <input id="url" type="url"
+               placeholder="https://example.com">
+      </div>
+
+      <div class="field">
+        <label for="description">Short Description</label>
+        <textarea id="description" maxlength="1000"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="about">About</label>
+        <textarea id="about" maxlength="5000"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="features">
+          Features (one feature per line)
+        </label>
+        <textarea id="features"
+                  placeholder="AI writing&#10;Content generation&#10;Research assistance"></textarea>
+      </div>
+
+      <div class="checks">
+        <label>
+          <input type="checkbox" id="featured">
+          Featured Tool
+        </label>
+
+        <label>
+          <input type="checkbox" id="active" checked>
+          Active
+        </label>
+      </div>
+
+      <div id="formMessage" role="status" aria-live="polite"></div>
+
+      <div class="modal-actions">
+        <button type="button" id="cancelButton">Cancel</button>
+        <button type="submit" class="primary" id="saveButton">
+          Save Tool
         </button>
+      </div>
 
-        <div
-          id="importMessage"
-          class="neutral-message"
-          role="status"
-          aria-live="polite"
-        ></div>
-      </section>
-    </main>
-
+    </form>
   </div>
+</div>
 
-  <script>
-    async function verifySession() {
-      try {
-        const response = await fetch("/api/admin/session", {
-          method: "GET",
-          credentials: "same-origin",
-          cache: "no-store"
-        });
+<script>
+const API = "/api/admin/tools";
 
-        if (!response.ok) {
-          throw new Error("Unauthorized");
-        }
+let tools = [];
 
-        const result = await response.json();
+const $ = id => document.getElementById(id);
 
-        if (
-          !result.success ||
-          !result.authenticated ||
-          result.role !== "admin"
-        ) {
-          throw new Error("Invalid session");
-        }
+function showMessage(element, message, type) {
+  element.className = message ? "message " + type : "";
+  element.textContent = message || "";
+}
 
-        document.getElementById("loading").hidden = true;
-        document.getElementById("dashboard").hidden = false;
+async function apiRequest(url, options = {}) {
+  const response = await fetch(url, {
+    credentials: "same-origin",
+    cache: "no-store",
+    ...options,
+    headers: {
+      ...(options.headers || {})
+    }
+  });
 
-      } catch (error) {
-        document.getElementById("loading").hidden = true;
-        document.getElementById("error").style.display = "block";
+  if (response.status === 401) {
+    window.location.replace("/admin/");
+    throw new Error("Session expired. Please sign in again.");
+  }
 
-        setTimeout(() => {
-          window.location.replace("/admin/");
-        }, 1800);
-      }
+  let result;
+
+  try {
+    result = await response.json();
+  } catch {
+    throw new Error("Invalid server response.");
+  }
+
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || "Request failed.");
+  }
+
+  return result;
+}
+
+async function verifySession() {
+  try {
+    const result = await apiRequest("/api/admin/session");
+
+    if (!result.authenticated || result.role !== "admin") {
+      throw new Error("Invalid administrator session.");
     }
 
-    document.getElementById("importButton")
-      .addEventListener("click", async () => {
+    $("loading").hidden = true;
+    $("dashboard").hidden = false;
 
-        const button = document.getElementById("importButton");
-        const message = document.getElementById("importMessage");
+    await loadTools();
 
-        const confirmed = window.confirm(
-          "Import the 17 AI tools into the database?"
-        );
+  } catch (error) {
+    $("loading").hidden = true;
+    $("error").style.display = "block";
 
-        if (!confirmed) return;
+    setTimeout(() => {
+      window.location.replace("/admin/");
+    }, 1800);
+  }
+}
 
-        button.disabled = true;
-        button.textContent = "Importing...";
-        message.className = "neutral-message";
-        message.textContent = "Please wait. Import is in progress...";
+async function loadTools() {
+  const list = $("toolList");
 
-        try {
-          const response = await fetch("/api/seed-tools", {
-            method: "POST",
-            credentials: "same-origin",
-            cache: "no-store"
-          });
+  list.textContent = "Loading tools...";
 
-          const result = await response.json();
+  try {
+    const result = await apiRequest(API);
 
-          if (response.status === 401) {
-            throw new Error(
-              "Administrator session expired. Please sign in again."
-            );
-          }
+    tools = Array.isArray(result.tools) ? result.tools : [];
 
-          if (!response.ok || !result.success) {
-            throw new Error(
-              result.message || "Import failed."
-            );
-          }
+    updateStats();
+    updateCategories();
+    renderTools();
 
-          message.className = "success-message";
-          message.textContent =
-            "Import completed successfully. " +
-            result.inserted +
-            " new tools added out of " +
-            result.total +
-            ". Existing tools were not duplicated.";
+  } catch (error) {
+    list.textContent = "";
 
-          button.textContent = "Import Completed";
+    const message = document.createElement("p");
+    message.className = "error-message";
+    message.textContent = error.message;
 
-        } catch (error) {
-          message.className = "error-message";
-          message.textContent = error.message;
+    list.appendChild(message);
+  }
+}
 
-          button.disabled = false;
-          button.textContent = "Try Import Again";
-        }
-      });
+function updateStats() {
+  $("totalCount").textContent = tools.length;
 
-    document.getElementById("logoutButton")
-      .addEventListener("click", async () => {
+  $("activeCount").textContent =
+    tools.filter(tool => tool.status === "active").length;
 
-        const button = document.getElementById("logoutButton");
-        button.disabled = true;
-        button.textContent = "Signing out...";
+  $("featuredCount").textContent =
+    tools.filter(tool => Boolean(tool.featured)).length;
+}
 
-        try {
-          await fetch("/api/admin/logout", {
-            method: "POST",
-            credentials: "same-origin",
-            cache: "no-store"
-          });
-        } finally {
-          window.location.replace("/admin/");
-        }
-      });
+function updateCategories() {
+  const select = $("categoryFilter");
+  const previous = select.value;
 
-    verifySession();
-  </script>
+  const categories = [...new Set(
+    tools.map(tool => tool.category).filter(Boolean)
+  )].sort();
+
+  select.replaceChildren();
+
+  const all = document.createElement("option");
+  all.value = "";
+  all.textContent = "All Categories";
+  select.appendChild(all);
+
+  categories.forEach(category => {
+    const option = document.createElement("option");
+    option.value = category;
+    option.textContent = category;
+    select.appendChild(option);
+  });
+
+  select.value = categories.includes(previous) ? previous : "";
+}
+
+function createTag(text, className = "") {
+  const tag = document.createElement("span");
+  tag.className = "tag " + className;
+  tag.textContent = text;
+  return tag;
+}
+
+function renderTools() {
+  const search = $("searchInput").value.toLowerCase().trim();
+  const category = $("categoryFilter").value;
+  const status = $("statusFilter").value;
+
+  const filtered = tools.filter(tool => {
+    const matchesSearch = [
+      tool.name,
+      tool.category,
+      tool.description,
+      tool.slug
+    ].some(value => String(value || "").toLowerCase().includes(search));
+
+    const matchesCategory =
+      !category || tool.category === category;
+
+    const matchesStatus =
+      !status || tool.status === status;
+
+    return matchesSearch && matchesCategory && matchesStatus;
+  });
+
+  $("resultsCount").textContent =
+    filtered.length + " of " + tools.length + " tools";
+
+  const list = $("toolList");
+  list.replaceChildren();
+
+  if (!filtered.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "No tools found.";
+    list.appendChild(empty);
+    return;
+  }
+
+  filtered.forEach(tool => {
+    const card = document.createElement("article");
+    card.className = "tool";
+
+    const info = document.createElement("div");
+    info.className = "tool-info";
+
+    const name = document.createElement("h3");
+    name.textContent = tool.name || "Unnamed Tool";
+
+    const description = document.createElement("p");
+    description.textContent = tool.description || "No description available.";
+
+    const meta = document.createElement("div");
+    meta.className = "tool-meta";
+
+    meta.appendChild(createTag(tool.category || "Uncategorized"));
+
+    meta.appendChild(
+      createTag(
+        tool.status === "inactive" ? "Inactive" : "Active",
+        tool.status === "inactive" ? "inactive" : ""
+      )
+    );
+
+    if (tool.featured) {
+      meta.appendChild(createTag("Featured", "featured"));
+    }
+
+    info.append(name, description, meta);
+
+    const actions = document.createElement("div");
+    actions.className = "tool-actions";
+
+    const edit = document.createElement("button");
+    edit.type = "button";
+    edit.textContent = "Edit";
+    edit.addEventListener("click", () => openEditor(tool));
+
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "danger";
+    remove.textContent = "Delete";
+    remove.addEventListener("click", () => deleteTool(tool));
+
+    actions.append(edit, remove);
+    card.append(info, actions);
+    list.appendChild(card);
+  });
+}
+
+function openEditor(tool = null) {
+  $("toolForm").reset();
+
+  $("toolId").value = tool ? tool.id : "";
+  $("modalTitle").textContent = tool ? "Edit Tool" : "Add New Tool";
+
+  $("name").value = tool?.name || "";
+  $("category").value = tool?.category || "";
+  $("slug").value = tool?.slug || "";
+  $("letter").value = tool?.letter || "";
+  $("url").value = tool?.url || "";
+  $("description").value = tool?.description || "";
+  $("about").value = tool?.about || "";
+
+  $("features").value = Array.isArray(tool?.features)
+    ? tool.features.join("\n")
+    : "";
+
+  $("featured").checked = Boolean(tool?.featured);
+  $("active").checked = tool?.status !== "inactive";
+
+  $("formMessage").textContent = "";
+
+  $("saveButton").textContent = tool ? "Save Changes" : "Add Tool";
+
+  $("toolModal").classList.add("open");
+}
+
+function closeEditor() {
+  $("toolModal").classList.remove("open");
+}
+
+$("addButton").addEventListener("click", () => openEditor());
+
+$("cancelButton").addEventListener("click", closeEditor);
+
+$("toolModal").addEventListener("click", event => {
+  if (event.target === $("toolModal")) {
+    closeEditor();
+  }
+});
+
+$("name").addEventListener("input", () => {
+  if (!$("toolId").value && !$("slug").dataset.edited) {
+    $("slug").value = makeSlug($("name").value);
+  }
+});
+
+$("slug").addEventListener("input", () => {
+  $("slug").dataset.edited = "true";
+});
+
+function makeSlug(value) {
+  return String(value || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+$("toolForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const button = $("saveButton");
+  button.disabled = true;
+  button.textContent = "Saving...";
+
+  const id = $("toolId").value;
+
+  const data = {
+    name: $("name").value.trim(),
+    category: $("category").value.trim(),
+    slug: $("slug").value.trim(),
+    letter: $("letter").value.trim(),
+    url: $("url").value.trim(),
+    description: $("description").value.trim(),
+    about: $("about").value.trim(),
+    features: $("features").value
+      .split("\n")
+      .map(value => value.trim())
+      .filter(Boolean),
+    featured: $("featured").checked,
+    status: $("active").checked ? "active" : "inactive"
+  };
+
+  if (id) data.id = id;
+
+  try {
+    await apiRequest(API, {
+      method: id ? "PUT" : "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    closeEditor();
+    $("slug").dataset.edited = "";
+
+    await loadTools();
+
+    showMessage(
+      $("toolsMessage"),
+      id ? "Tool updated successfully." : "Tool added successfully.",
+      "success-message"
+    );
+
+  } catch (error) {
+    showMessage($("formMessage"), error.message, "error-message");
+
+  } finally {
+    button.disabled = false;
+    button.textContent = id ? "Save Changes" : "Add Tool";
+  }
+});
+
+async function deleteTool(tool) {
+  const confirmed = window.confirm(
+    "Delete " + tool.name + " permanently? This action cannot be undone."
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await apiRequest(API, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ id: tool.id })
+    });
+
+    await loadTools();
+
+    showMessage(
+      $("toolsMessage"),
+      "Tool deleted successfully.",
+      "success-message"
+    );
+
+  } catch (error) {
+    showMessage($("toolsMessage"), error.message, "error-message");
+  }
+}
+
+$("searchInput").addEventListener("input", renderTools);
+$("categoryFilter").addEventListener("change", renderTools);
+$("statusFilter").addEventListener("change", renderTools);
+
+$("refreshButton").addEventListener("click", loadTools);
+
+$("importButton").addEventListener("click", async () => {
+  const button = $("importButton");
+
+  if (!window.confirm(
+    "Import the initial 17 AI tools? Existing tools should not be duplicated."
+  )) return;
+
+  button.disabled = true;
+  button.textContent = "Importing...";
+
+  showMessage(
+    $("importMessage"),
+    "Import is in progress...",
+    "neutral-message"
+  );
+
+  try {
+    const result = await apiRequest("/api/seed-tools", {
+      method: "POST"
+    });
+
+    showMessage(
+      $("importMessage"),
+      "Import completed. " + result.inserted +
+      " new tools added out of " + result.total + ".",
+      "success-message"
+    );
+
+    await loadTools();
+
+  } catch (error) {
+    showMessage($("importMessage"), error.message, "error-message");
+
+  } finally {
+    button.disabled = false;
+    button.textContent = "Import 17 AI Tools";
+  }
+});
+
+$("logoutButton").addEventListener("click", async () => {
+  const button = $("logoutButton");
+  button.disabled = true;
+  button.textContent = "Signing out...";
+
+  try {
+    await fetch("/api/admin/logout", {
+      method: "POST",
+      credentials: "same-origin",
+      cache: "no-store"
+    });
+  } finally {
+    window.location.replace("/admin/");
+  }
+});
+
+verifySession();
+</script>
 
 </body>
 </html>
