@@ -8,7 +8,6 @@
   <title>AI ONE | Admin Login</title>
   <style>
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       min-height: 100vh;
@@ -17,11 +16,8 @@
       padding: 20px;
       font-family: Arial, sans-serif;
       color: #dce6f2;
-      background:
-        radial-gradient(circle at top, #102b48, transparent 45%),
-        #070b12;
+      background: radial-gradient(circle at top, #102b48, transparent 45%), #070b12;
     }
-
     .panel {
       width: 100%;
       max-width: 420px;
@@ -31,7 +27,6 @@
       background: #0d1420;
       box-shadow: 0 20px 70px #0009;
     }
-
     .logo {
       text-align: center;
       font-size: 32px;
@@ -39,26 +34,9 @@
       letter-spacing: 4px;
       color: #168cff;
     }
-
-    h1 {
-      text-align: center;
-      font-size: 22px;
-      margin: 28px 0 8px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #91a4ba;
-      font-size: 14px;
-      margin-bottom: 28px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 9px;
-      font-size: 13px;
-    }
-
+    h1 { text-align: center; font-size: 22px; margin: 28px 0 8px; }
+    .subtitle { text-align: center; color: #91a4ba; font-size: 14px; margin-bottom: 28px; }
+    label { display: block; margin-bottom: 9px; font-size: 13px; }
     input {
       width: 100%;
       padding: 14px;
@@ -69,11 +47,7 @@
       font-size: 15px;
       outline: none;
     }
-
-    input:focus {
-      border-color: #168cff;
-    }
-
+    input:focus { border-color: #168cff; }
     button {
       width: 100%;
       margin-top: 20px;
@@ -86,12 +60,7 @@
       font-weight: bold;
       cursor: pointer;
     }
-
-    button:disabled {
-      opacity: .6;
-      cursor: wait;
-    }
-
+    button:disabled { opacity: .6; cursor: wait; }
     #message {
       min-height: 20px;
       margin-top: 16px;
@@ -99,13 +68,7 @@
       font-size: 13px;
       color: #ff7777;
     }
-
-    footer {
-      margin-top: 28px;
-      text-align: center;
-      color: #65788e;
-      font-size: 11px;
-    }
+    footer { margin-top: 28px; text-align: center; color: #65788e; font-size: 11px; }
   </style>
 </head>
 <body>
@@ -116,18 +79,10 @@
 
     <form id="loginForm">
       <label for="password">Admin Password</label>
-      <input
-        id="password"
-        type="password"
+      <input id="password" type="password"
         placeholder="Enter your admin password"
-        autocomplete="current-password"
-        required
-      >
-
-      <button id="loginButton" type="submit">
-        Sign In
-      </button>
-
+        autocomplete="current-password" required>
+      <button id="loginButton" type="submit">Sign In</button>
       <div id="message" role="alert"></div>
     </form>
 
@@ -140,24 +95,8 @@
     const button = document.getElementById("loginButton");
     const message = document.getElementById("message");
 
-    async function checkSession() {
-      try {
-        const response = await fetch("/api/admin/session", {
-          credentials: "same-origin",
-          cache: "no-store"
-        });
-
-        if (response.ok) {
-          window.location.replace("/admin/dashboard.html");
-        }
-      } catch {
-        message.textContent = "Unable to verify session.";
-      }
-    }
-
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
-
       message.textContent = "";
       button.disabled = true;
       button.textContent = "Signing in...";
@@ -166,12 +105,9 @@
         const response = await fetch("/api/admin/login", {
           method: "POST",
           credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            password: passwordInput.value
-          })
+          cache: "no-store",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password: passwordInput.value })
         });
 
         const result = await response.json();
@@ -181,11 +117,24 @@
         }
 
         passwordInput.value = "";
-        await checkSession();
 
-        if (!window.location.pathname.includes("dashboard")) {
-          message.textContent = "Session verification failed.";
+        const sessionResponse = await fetch("/api/admin/session", {
+          method: "GET",
+          credentials: "same-origin",
+          cache: "no-store"
+        });
+
+        if (!sessionResponse.ok) {
+          throw new Error("Login succeeded, but session verification failed.");
         }
+
+        const session = await sessionResponse.json();
+
+        if (!session.success || !session.authenticated) {
+          throw new Error("Administrator session is not valid.");
+        }
+
+        window.location.assign("/admin/dashboard.html");
 
       } catch (error) {
         message.textContent = error.message || "Login failed.";
@@ -194,8 +143,6 @@
         button.textContent = "Sign In";
       }
     });
-
-    checkSession();
   </script>
 </body>
 </html>
