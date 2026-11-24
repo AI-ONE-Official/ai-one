@@ -45,9 +45,14 @@
       font-weight: bold;
     }
 
-    button:hover {
+    button:hover:not(:disabled) {
       background: #168cff;
       color: white;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     main {
@@ -93,6 +98,25 @@
       line-height: 1.7;
     }
 
+    .import-button {
+      margin-top: 12px;
+      padding: 14px 22px;
+      background: #168cff;
+      color: white;
+      border: 1px solid #168cff;
+      font-size: 15px;
+    }
+
+    #importMessage {
+      margin-top: 18px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    .success-message { color: #55dfad; }
+    .error-message { color: #ff7777; }
+    .neutral-message { color: #91a4ba; }
+
     #loading {
       text-align: center;
       margin-top: 100px;
@@ -112,6 +136,7 @@
       header { padding: 18px 5%; }
       h1 { font-size: 24px; }
       .welcome { padding: 24px; }
+      .import-button { width: 100%; }
     }
   </style>
 </head>
@@ -147,16 +172,35 @@
       <section class="info">
         <h2>Platform Overview</h2>
         <p>
-          Your administrator dashboard is now connected
+          Your administrator dashboard is connected
           to the AI ONE authentication system.
         </p>
         <p>
           Secure administrator access is active.
         </p>
+      </section>
+
+      <section class="info">
+        <h2>AI Tools Management</h2>
         <p>
-          Additional platform management features
-          will be added in future updates.
+          Import the initial collection of 17 AI tools
+          into the AI ONE database.
         </p>
+
+        <button
+          id="importButton"
+          class="import-button"
+          type="button"
+        >
+          Import 17 AI Tools
+        </button>
+
+        <div
+          id="importMessage"
+          class="neutral-message"
+          role="status"
+          aria-live="polite"
+        ></div>
       </section>
     </main>
 
@@ -197,6 +241,63 @@
         }, 1800);
       }
     }
+
+    document.getElementById("importButton")
+      .addEventListener("click", async () => {
+
+        const button = document.getElementById("importButton");
+        const message = document.getElementById("importMessage");
+
+        const confirmed = window.confirm(
+          "Import the 17 AI tools into the database?"
+        );
+
+        if (!confirmed) return;
+
+        button.disabled = true;
+        button.textContent = "Importing...";
+        message.className = "neutral-message";
+        message.textContent = "Please wait. Import is in progress...";
+
+        try {
+          const response = await fetch("/api/seed-tools", {
+            method: "POST",
+            credentials: "same-origin",
+            cache: "no-store"
+          });
+
+          const result = await response.json();
+
+          if (response.status === 401) {
+            throw new Error(
+              "Administrator session expired. Please sign in again."
+            );
+          }
+
+          if (!response.ok || !result.success) {
+            throw new Error(
+              result.message || "Import failed."
+            );
+          }
+
+          message.className = "success-message";
+          message.textContent =
+            "Import completed successfully. " +
+            result.inserted +
+            " new tools added out of " +
+            result.total +
+            ". Existing tools were not duplicated.";
+
+          button.textContent = "Import Completed";
+
+        } catch (error) {
+          message.className = "error-message";
+          message.textContent = error.message;
+
+          button.disabled = false;
+          button.textContent = "Try Import Again";
+        }
+      });
 
     document.getElementById("logoutButton")
       .addEventListener("click", async () => {
