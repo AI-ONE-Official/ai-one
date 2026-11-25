@@ -1,6 +1,8 @@
 
 import { isAdminAuthenticated } from "./_auth.js";
 
+const ALLOWED_ORIGIN = "https://ai-one-a2u.pages.dev";
+
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
@@ -10,6 +12,10 @@ function json(data, status = 200) {
       "X-Content-Type-Options": "nosniff"
     }
   });
+}
+
+function hasAllowedOrigin(request) {
+  return request.headers.get("Origin") === ALLOWED_ORIGIN;
 }
 
 async function authorize(request, env) {
@@ -319,6 +325,13 @@ export async function onRequestGet({ request, env }) {
 }
 
 export async function onRequestPost({ request, env }) {
+  if (!hasAllowedOrigin(request)) {
+    return json({
+      success: false,
+      message: "Forbidden origin"
+    }, 403);
+  }
+
   if (!(await authorize(request, env))) {
     return json({
       success: false,
@@ -407,6 +420,13 @@ export async function onRequestPost({ request, env }) {
 }
 
 export async function onRequestPut({ request, env }) {
+  if (!hasAllowedOrigin(request)) {
+    return json({
+      success: false,
+      message: "Forbidden origin"
+    }, 403);
+  }
+
   if (!(await authorize(request, env))) {
     return json({
       success: false,
@@ -518,6 +538,13 @@ export async function onRequestPut({ request, env }) {
 }
 
 export async function onRequestDelete({ request, env }) {
+  if (!hasAllowedOrigin(request)) {
+    return json({
+      success: false,
+      message: "Forbidden origin"
+    }, 403);
+  }
+
   if (!(await authorize(request, env))) {
     return json({
       success: false,
