@@ -1,6 +1,12 @@
 
 import { isAdminAuthenticated } from "./admin/_auth.js";
 
+const ALLOWED_ORIGIN = "https://ai-one-a2u.pages.dev";
+
+function hasAllowedOrigin(request) {
+  return request.headers.get("Origin") === ALLOWED_ORIGIN;
+}
+
 const tools = [
   {
     slug: "chatgpt",
@@ -192,6 +198,19 @@ const tools = [
 ];
 
 export async function onRequestPost({ request, env }) {
+  if (!hasAllowedOrigin(request)) {
+    return new Response(
+      JSON.stringify({ success: false, message: "Forbidden origin" }),
+      {
+        status: 403,
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-store"
+        }
+      }
+    );
+  }
+
   const authenticated = await isAdminAuthenticated(request, env);
 
   if (!authenticated) {
