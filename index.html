@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#070b12">
 <meta name="description" content="AI ONE — Discover powerful artificial intelligence tools in one destination.">
+<meta name="robots" content="index, follow">
 <title>AI ONE — Discover Intelligence</title>
 
 <style>
@@ -21,7 +22,7 @@
   --radius:20px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
 body{
   font-family:Arial,Helvetica,sans-serif;
   background:var(--bg);
@@ -34,12 +35,29 @@ button,input{font:inherit}
 button{cursor:pointer}
 .container{width:min(1160px,92%);margin:auto}
 
+/* ACCESSIBILITY */
+:focus-visible{
+  outline:2px solid var(--blue2);
+  outline-offset:4px;
+}
+.skip-link{
+  position:absolute;
+  left:-9999px;
+  top:10px;
+  z-index:999;
+  padding:10px 15px;
+  background:var(--blue);
+  color:#fff;
+  border-radius:8px;
+}
+.skip-link:focus{left:10px}
+
 /* HEADER */
 header{
   position:sticky;
   top:0;
   z-index:100;
-  background:rgba(7,11,18,.92);
+  background:rgba(7,11,18,.94);
   backdrop-filter:blur(18px);
   border-bottom:1px solid var(--border);
 }
@@ -457,6 +475,21 @@ section{padding:55px 0}
   font-size:14px;
 }
 .about-box .btn{margin-top:22px}
+.contact-email{
+  display:block;
+  width:fit-content;
+  max-width:100%;
+  margin:18px auto 0;
+  color:var(--blue2);
+  font-size:14px;
+  font-weight:bold;
+  overflow-wrap:anywhere;
+}
+.contact-email:hover{text-decoration:underline}
+.contact-note{
+  margin-top:7px!important;
+  font-size:12px!important;
+}
 
 /* DETAILS */
 .detail-wrap{min-height:75vh;padding:45px 0 75px}
@@ -528,18 +561,35 @@ section{padding:55px 0}
 /* FOOTER */
 footer{
   border-top:1px solid var(--border);
-  padding:28px 0;
+  padding:35px 0;
   color:var(--muted);
   font-size:12px;
+  background:rgba(5,9,15,.5);
 }
 .footer-inner{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:15px;
+  gap:18px;
+  flex-wrap:wrap;
 }
 .footer-brand{font-weight:900;color:var(--silver);letter-spacing:1px}
 .footer-brand span{color:var(--blue2)}
+.footer-contact{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.footer-contact strong{
+  color:var(--silver);
+  font-size:12px;
+}
+.footer-contact a{
+  color:var(--blue2);
+  font-weight:bold;
+  overflow-wrap:anywhere;
+}
+.footer-contact a:hover{text-decoration:underline}
 
 /* MOBILE */
 @media(max-width:800px){
@@ -577,15 +627,31 @@ footer{
   }
   .filter-btn{white-space:nowrap;flex-shrink:0}
   .about-box{padding:28px 20px}
-  .footer-inner{flex-direction:column;text-align:center}
+  .footer-inner{
+    flex-direction:column;
+    text-align:center;
+  }
+  .footer-contact{align-items:center}
   .detail-wrap{padding-top:30px}
   .detail-actions{flex-direction:column}
   .detail-actions .btn{width:100%}
+}
+
+/* REDUCED MOTION */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
 }
 </style>
 </head>
 
 <body>
+
+<a class="skip-link" href="#mainContent">Skip to content</a>
 
 <header>
   <div class="container nav">
@@ -593,7 +659,8 @@ footer{
       <span class="logo-mark">A</span>
       AI <span>ONE</span>
     </a>
-    <nav class="nav-links">
+
+    <nav class="nav-links" aria-label="Main navigation">
       <a href="./#featured">Featured</a>
       <a href="./#tools">Explore</a>
       <a href="./#about">About</a>
@@ -602,7 +669,7 @@ footer{
   </div>
 </header>
 
-<main id="mainContent">
+<main id="mainContent" aria-live="polite">
   <div class="container" style="padding:80px 0">
     <div class="loading-state">Loading AI ONE tools...</div>
   </div>
@@ -610,9 +677,20 @@ footer{
 
 <footer>
   <div class="container footer-inner">
+
     <div class="footer-brand">AI <span>ONE</span></div>
+
+    <div class="footer-contact">
+      <strong>CONTACT AI ONE</strong>
+      <a href="mailto:contactaione824@gmail.com?subject=Contact%20AI%20ONE">
+        contactaione824@gmail.com
+      </a>
+    </div>
+
     <div>© 2026 AI ONE. All rights reserved.</div>
+
     <div>One Platform. Endless Possibilities.</div>
+
   </div>
 </footer>
 
@@ -622,16 +700,26 @@ footer{
 /*
   AI ONE
   Public tools are loaded from the Cloudflare D1 API.
+
   API endpoint: /api/tools
+
+  Contact:
+  contactaione824@gmail.com
 */
 
 const API_URL = "/api/tools";
+const CONTACT_EMAIL = "contactaione824@gmail.com";
+
 const main = document.getElementById("mainContent");
+
 const params = new URLSearchParams(window.location.search);
 const selectedTool = params.get("tool");
 
 let tools = [];
 let activeCategory = "ALL";
+let loading = false;
+
+/* HTML ESCAPING */
 
 function escapeHTML(value){
   return String(value ?? "").replace(/[&<>"']/g, character => ({
@@ -643,155 +731,342 @@ function escapeHTML(value){
   })[character]);
 }
 
+/* URL VALIDATION */
+
 function safeURL(value){
   try{
-    const url = new URL(String(value || ""));
-    if(url.protocol === "https:" || url.protocol === "http:"){
+    const url = new URL(String(value || "").trim());
+
+    if(
+      url.protocol === "https:" ||
+      url.protocol === "http:"
+    ){
       return url.href;
     }
-  }catch(error){}
-  return "#";
+
+    return "";
+  }catch(error){
+    return "";
+  }
 }
 
+/* TOOL NORMALIZATION */
+
 function normalizeTool(tool){
+
+  if(!tool || typeof tool !== "object"){
+    return null;
+  }
+
+  const name = String(tool.name || "Unnamed Tool");
+
   const features = Array.isArray(tool.features)
     ? tool.features
+        .filter(item =>
+          typeof item === "string" ||
+          typeof item === "number"
+        )
+        .map(item => String(item).slice(0,500))
     : [];
+
+  const rawStatus = String(
+    tool.status || "active"
+  ).toLowerCase();
+
+  const featured =
+    tool.featured === true ||
+    tool.featured === 1 ||
+    tool.featured === "1" ||
+    String(tool.featured).toLowerCase() === "true";
 
   return {
     id: String(tool.id || tool.slug || ""),
     slug: String(tool.slug || tool.id || ""),
-    name: String(tool.name || "Unnamed Tool"),
-    category: String(tool.category || "OTHER").toUpperCase(),
-    letter: String(tool.letter || tool.name?.charAt(0) || "A").charAt(0).toUpperCase(),
+    name: name.slice(0,150),
+    category: String(
+      tool.category || "OTHER"
+    ).toUpperCase().slice(0,60),
+
+    letter: String(
+      tool.letter || name.charAt(0) || "A"
+    ).charAt(0).toUpperCase(),
+
     url: safeURL(tool.url),
-    description: String(tool.description || ""),
-    about: String(tool.about || tool.description || ""),
-    features: features.map(item => String(item)),
-    featured: tool.featured === true || tool.featured === 1,
-    status: String(tool.status || "active")
+
+    description: String(
+      tool.description || ""
+    ).slice(0,2000),
+
+    about: String(
+      tool.about || tool.description || ""
+    ).slice(0,5000),
+
+    features,
+
+    featured,
+
+    status: rawStatus
   };
 }
 
+/* LOADING */
+
 function showLoading(){
+
   main.innerHTML = `
     <div class="container" style="padding:80px 0">
-      <div class="loading-state">Loading AI ONE tools...</div>
+      <div class="loading-state" role="status">
+        Loading AI ONE tools...
+      </div>
     </div>
   `;
 }
 
+/* ERROR HANDLING */
+
 function showLoadError(){
+
   main.innerHTML = `
     <div class="container" style="padding:80px 0">
-      <div class="error-state">
+      <div class="error-state" role="alert">
+
         <strong>Unable to load AI ONE tools</strong>
-        <p>We could not connect to the tools database. Please try again.</p>
-        <button type="button" id="retryLoad">Try Again</button>
+
+        <p>
+          We could not connect to the tools database.
+          Please check your connection and try again.
+        </p>
+
+        <button type="button" id="retryLoad">
+          Try Again
+        </button>
+
       </div>
     </div>
   `;
 
-  document.getElementById("retryLoad").addEventListener("click", loadTools);
+  const retryButton = document.getElementById("retryLoad");
+
+  if(retryButton){
+    retryButton.addEventListener("click", loadTools);
+  }
 }
 
+/* LOAD DATABASE TOOLS */
+
 async function loadTools(){
+
+  if(loading) return;
+
+  loading = true;
+
   showLoading();
 
   try{
+
     const response = await fetch(API_URL, {
+
       method:"GET",
+
       cache:"no-store",
+
+      credentials:"same-origin",
+
       headers:{
         "Accept":"application/json"
       }
+
     });
 
     if(!response.ok){
-      throw new Error("API request failed: " + response.status);
+
+      throw new Error(
+        "API request failed: " + response.status
+      );
+
     }
 
     const data = await response.json();
 
-    if(data.success !== true || !Array.isArray(data.tools)){
+    if(
+      !data ||
+      data.success !== true ||
+      !Array.isArray(data.tools)
+    ){
+
       throw new Error("Invalid tools API response");
+
     }
 
-    tools = data.tools
+    const normalized = data.tools
       .map(normalizeTool)
-      .filter(tool => tool.status === "active");
+      .filter(Boolean);
+
+    tools = normalized.filter(tool =>
+      tool.status === "active" &&
+      tool.slug.trim().length > 0
+    );
 
     if(selectedTool){
+
       renderDetails(selectedTool);
+
     }else{
+
       renderHome();
+
     }
 
   }catch(error){
+
     console.error("AI ONE loading error:", error);
+
     showLoadError();
+
+  }finally{
+
+    loading = false;
+
   }
 }
 
+/* CATEGORIES */
+
 function getCategories(){
+
   return [
     "ALL",
+
     ...new Set(
       tools
         .map(tool => tool.category)
         .filter(Boolean)
         .sort()
     )
+
   ];
+
 }
 
+/* HOME PAGE */
+
 function renderHome(){
+
   document.title = "AI ONE — Discover Intelligence";
 
   const categories = getCategories();
+
   const categoryCount = categories.length - 1;
-  const featuredTools = tools.filter(tool => tool.featured);
+
+  const featuredTools = tools.filter(
+    tool => tool.featured
+  );
 
   main.innerHTML = `
+
     <section class="hero">
+
       <div class="container">
-        <div class="eyebrow">✦ THE FUTURE OF INTELLIGENCE</div>
-        <h1>One Destination.<br><span class="gradient-text">Endless AI Possibilities.</span></h1>
-        <p>Discover powerful artificial intelligence tools that help you create, work, learn and innovate.</p>
+
+        <div class="eyebrow">
+          ✦ THE FUTURE OF INTELLIGENCE
+        </div>
+
+        <h1>
+          One Destination.<br>
+          <span class="gradient-text">
+            Endless AI Possibilities.
+          </span>
+        </h1>
+
+        <p>
+          Discover powerful artificial intelligence tools
+          that help you create, work, learn and innovate.
+        </p>
+
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#tools">Explore AI Tools →</a>
-          <a class="btn btn-secondary" href="#featured">Discover Featured</a>
+
+          <a class="btn btn-primary" href="#tools">
+            Explore AI Tools →
+          </a>
+
+          <a class="btn btn-secondary" href="#featured">
+            Discover Featured
+          </a>
+
         </div>
+
         <div class="stats">
-          <div class="stat"><strong>${tools.length}</strong><span>AI TOOLS</span></div>
-          <div class="stat"><strong>${String(categoryCount).padStart(2,"0")}</strong><span>CATEGORIES</span></div>
-          <div class="stat"><strong>01</strong><span>DESTINATION</span></div>
+
+          <div class="stat">
+            <strong>${tools.length}</strong>
+            <span>AI TOOLS</span>
+          </div>
+
+          <div class="stat">
+            <strong>${String(categoryCount).padStart(2,"0")}</strong>
+            <span>CATEGORIES</span>
+          </div>
+
+          <div class="stat">
+            <strong>01</strong>
+            <span>DESTINATION</span>
+          </div>
+
         </div>
+
       </div>
+
     </section>
 
     <section id="featured">
+
       <div class="container">
+
         <div class="section-heading">
-          <div class="section-label">HANDPICKED FOR YOU</div>
+
+          <div class="section-label">
+            HANDPICKED FOR YOU
+          </div>
+
           <h2>Featured AI Tools</h2>
-          <p>Explore some exciting tools in artificial intelligence.</p>
+
+          <p>
+            Explore some exciting tools in artificial intelligence.
+          </p>
+
         </div>
+
         <div class="featured-grid" id="featuredGrid"></div>
+
       </div>
+
     </section>
 
     <section class="explore-section" id="tools">
+
       <div class="container">
+
         <div class="section-heading">
-          <div class="section-label">EXPLORE THE COLLECTION</div>
+
+          <div class="section-label">
+            EXPLORE THE COLLECTION
+          </div>
+
           <h2>Explore AI Tools</h2>
-          <p>Find the right AI tool for your next idea.</p>
+
+          <p>
+            Find the right AI tool for your next idea.
+          </p>
+
         </div>
 
         <div class="search-panel">
+
           <div class="search-box">
-            <span class="search-icon">⌕</span>
+
+            <span class="search-icon" aria-hidden="true">⌕</span>
+
             <input
               id="searchInput"
               type="search"
@@ -799,223 +1074,485 @@ function renderHome(){
               autocomplete="off"
               aria-label="Search AI tools"
             >
-            <button class="clear-search" id="clearSearch" type="button" aria-label="Clear search">×</button>
+
+            <button
+              class="clear-search"
+              id="clearSearch"
+              type="button"
+              aria-label="Clear search"
+            >×</button>
+
           </div>
 
-          <div class="search-hint">Search by tool name, category or what you want to do.</div>
+          <div class="search-hint">
+            Search by tool name, category or what you want to do.
+          </div>
 
           <div class="filter-heading">
+
             <strong>Browse by category</strong>
+
             <span>Choose a category</span>
+
           </div>
 
-          <div class="filters" id="filters"></div>
+          <div
+            class="filters"
+            id="filters"
+            aria-label="Filter tools by category"
+          ></div>
+
         </div>
 
         <div class="results-line">
-          <span id="resultsCount">Showing ${tools.length} tools</span>
+
+          <span id="resultsCount">
+            Showing ${tools.length} tools
+          </span>
+
           <span>AI ONE COLLECTION</span>
+
         </div>
 
         <div class="tools-grid" id="toolsGrid"></div>
 
-        <div class="no-results" id="noResults">
+        <div class="no-results" id="noResults" role="status">
+
           <strong>No tools found</strong>
+
           Try another search term or choose a different category.
+
         </div>
+
       </div>
+
     </section>
 
     <section id="about">
+
       <div class="container">
+
         <div class="about-box">
-          <div class="section-label">ABOUT AI ONE</div>
+
+          <div class="section-label">
+            ABOUT AI ONE
+          </div>
+
           <h2>One Platform. Endless Possibilities.</h2>
-          <p>AI ONE brings powerful artificial intelligence tools together in one destination, helping everyone discover new ways to create, learn, work and innovate.</p>
-          <a href="#tools" class="btn btn-primary">Explore the Collection →</a>
+
+          <p>
+            AI ONE brings powerful artificial intelligence tools
+            together in one destination, helping everyone discover
+            new ways to create, learn, work and innovate.
+          </p>
+
+          <a href="#tools" class="btn btn-primary">
+            Explore the Collection →
+          </a>
+
+          <div class="section-label" style="margin-top:30px">
+            GET IN TOUCH
+          </div>
+
+          <p>
+            Have a question, suggestion or business inquiry?
+            We would love to hear from you.
+          </p>
+
+          <a
+            class="contact-email"
+            href="mailto:${CONTACT_EMAIL}?subject=Contact%20AI%20ONE"
+            aria-label="Email AI ONE"
+          >
+            ${CONTACT_EMAIL}
+          </a>
+
+          <a
+            class="btn btn-secondary"
+            href="mailto:${CONTACT_EMAIL}?subject=Contact%20AI%20ONE"
+          >
+            ✉ Contact via Email
+          </a>
+
         </div>
+
       </div>
+
     </section>
+
   `;
+
+  /* FEATURED TOOLS */
 
   const featuredGrid = document.getElementById("featuredGrid");
 
   featuredGrid.innerHTML = featuredTools.length
-    ? featuredTools.map(tool => `
-        <a class="featured-card" href="?tool=${encodeURIComponent(tool.slug)}">
-          <span class="featured-tag">✦ FEATURED TOOL</span>
-          <h3>${escapeHTML(tool.name)}</h3>
-          <p>${escapeHTML(tool.description)}</p>
-          <span class="featured-link">Explore ${escapeHTML(tool.name)} →</span>
-        </a>
-      `).join("")
-    : `<p style="color:var(--muted)">Featured tools will appear here.</p>`;
 
-  document.getElementById("filters").innerHTML = categories.map((category,index) => `
-    <button
-      type="button"
-      class="filter-btn ${index === 0 ? "active" : ""}"
-      data-filter="${escapeHTML(category)}"
-    >${category === "ALL" ? "All Tools" : escapeHTML(category)}</button>
-  `).join("");
+    ? featuredTools.map(tool => `
+
+        <a
+          class="featured-card"
+          href="?tool=${encodeURIComponent(tool.slug)}"
+        >
+
+          <span class="featured-tag">
+            ✦ FEATURED TOOL
+          </span>
+
+          <h3>${escapeHTML(tool.name)}</h3>
+
+          <p>${escapeHTML(tool.description)}</p>
+
+          <span class="featured-link">
+            Explore ${escapeHTML(tool.name)} →
+          </span>
+
+        </a>
+
+      `).join("")
+
+    : `
+        <p style="color:var(--muted)">
+          Featured tools will appear here.
+        </p>
+      `;
+
+  /* CATEGORY FILTERS */
+
+  document.getElementById("filters").innerHTML =
+    categories.map((category,index) => `
+
+      <button
+        type="button"
+        class="filter-btn ${index === 0 ? "active" : ""}"
+        data-filter="${escapeHTML(category)}"
+        aria-pressed="${index === 0 ? "true" : "false"}"
+      >
+        ${category === "ALL" ? "All Tools" : escapeHTML(category)}
+      </button>
+
+    `).join("");
 
   activeCategory = "ALL";
 
-  const searchInput = document.getElementById("searchInput");
-  const clearButton = document.getElementById("clearSearch");
+  const searchInput =
+    document.getElementById("searchInput");
+
+  const clearButton =
+    document.getElementById("clearSearch");
+
+  /* SEARCH AND FILTER */
 
   function updateTools(){
-    const query = searchInput.value.trim().toLowerCase();
 
-    clearButton.classList.toggle("show", query.length > 0);
+    const query = searchInput.value
+      .trim()
+      .toLowerCase();
+
+    clearButton.classList.toggle(
+      "show",
+      query.length > 0
+    );
 
     const filtered = tools.filter(tool => {
+
       const categoryMatch =
-        activeCategory === "ALL" || tool.category === activeCategory;
+        activeCategory === "ALL" ||
+        tool.category === activeCategory;
 
       const searchable = [
+
         tool.name,
         tool.category,
         tool.description,
         tool.about,
         ...tool.features
+
       ].join(" ").toLowerCase();
 
-      return categoryMatch && searchable.includes(query);
+      return (
+        categoryMatch &&
+        searchable.includes(query)
+      );
+
     });
 
-    document.getElementById("toolsGrid").innerHTML = filtered.map(tool => `
-      <a class="tool-card" href="?tool=${encodeURIComponent(tool.slug)}">
-        <div class="tool-top">
-          <div class="tool-icon">${escapeHTML(tool.letter)}</div>
-          <span class="tool-category">${escapeHTML(tool.category)}</span>
-        </div>
-        <h3>${escapeHTML(tool.name)}</h3>
-        <p>${escapeHTML(tool.description)}</p>
-        <span class="card-link">Explore ${escapeHTML(tool.name)} →</span>
-      </a>
-    `).join("");
+    document.getElementById("toolsGrid").innerHTML =
+      filtered.map(tool => `
 
-    document.getElementById("resultsCount").innerHTML =
-      `Showing <strong>${filtered.length}</strong> of ${tools.length} tools`;
+        <a
+          class="tool-card"
+          href="?tool=${encodeURIComponent(tool.slug)}"
+        >
+
+          <div class="tool-top">
+
+            <div class="tool-icon">
+              ${escapeHTML(tool.letter)}
+            </div>
+
+            <span class="tool-category">
+              ${escapeHTML(tool.category)}
+            </span>
+
+          </div>
+
+          <h3>${escapeHTML(tool.name)}</h3>
+
+          <p>${escapeHTML(tool.description)}</p>
+
+          <span class="card-link">
+            Explore ${escapeHTML(tool.name)} →
+          </span>
+
+        </a>
+
+      `).join("");
+
+    document.getElementById("resultsCount").innerHTML = `
+
+      Showing <strong>${filtered.length}</strong>
+      of ${tools.length} tools
+
+    `;
 
     document.getElementById("noResults").style.display =
       filtered.length === 0 ? "block" : "none";
 
     document.getElementById("toolsGrid").style.display =
       filtered.length === 0 ? "none" : "grid";
+
   }
 
   searchInput.addEventListener("input", updateTools);
 
+  /* CLEAR SEARCH */
+
   clearButton.addEventListener("click", () => {
+
     searchInput.value = "";
+
     updateTools();
+
     searchInput.focus();
+
   });
 
-  document.getElementById("filters").addEventListener("click", event => {
-    const button = event.target.closest(".filter-btn");
-    if(!button) return;
+  /* CATEGORY BUTTONS */
 
-    activeCategory = button.dataset.filter;
+  document.getElementById("filters")
+    .addEventListener("click", event => {
 
-    document.querySelectorAll(".filter-btn").forEach(item => {
-      item.classList.toggle("active", item === button);
+      const button = event.target.closest(".filter-btn");
+
+      if(!button) return;
+
+      activeCategory = button.dataset.filter;
+
+      document.querySelectorAll(".filter-btn")
+        .forEach(item => {
+
+          const selected = item === button;
+
+          item.classList.toggle("active", selected);
+
+          item.setAttribute(
+            "aria-pressed",
+            selected ? "true" : "false"
+          );
+
+        });
+
+      updateTools();
+
     });
 
-    updateTools();
-  });
-
-  document.addEventListener("keydown", handleSearchKeyboard);
-
   updateTools();
+
 }
 
-function handleSearchKeyboard(event){
-  const searchInput = document.getElementById("searchInput");
+/* GLOBAL SEARCH SHORTCUT */
+
+document.addEventListener("keydown", event => {
+
+  const searchInput =
+    document.getElementById("searchInput");
 
   if(!searchInput) return;
 
-  if(event.key === "/" && document.activeElement !== searchInput){
+  if(
+    event.key === "/" &&
+    !event.ctrlKey &&
+    !event.metaKey &&
+    !event.altKey &&
+    !["INPUT","TEXTAREA"].includes(
+      document.activeElement?.tagName
+    )
+  ){
+
     event.preventDefault();
+
     searchInput.focus();
+
   }
 
-  if(event.key === "Escape" && document.activeElement === searchInput){
+  if(
+    event.key === "Escape" &&
+    document.activeElement === searchInput
+  ){
+
     searchInput.value = "";
-    searchInput.dispatchEvent(new Event("input"));
+
+    searchInput.dispatchEvent(
+      new Event("input")
+    );
+
     searchInput.blur();
+
   }
-}
+
+});
+
+/* TOOL DETAILS PAGE */
 
 function renderDetails(slug){
-  const tool = tools.find(item => item.slug === slug);
+
+  const tool = tools.find(item =>
+    item.slug === slug
+  );
 
   if(!tool){
+
     document.title = "Tool Not Found — AI ONE";
 
     main.innerHTML = `
+
       <div class="container not-found">
+
         <h1>Tool Not Found</h1>
+
         <p style="color:var(--muted);margin:12px 0 25px">
+
           The tool you are looking for could not be found.
+
         </p>
-        <a class="btn btn-primary" href="./">Back to AI ONE</a>
+
+        <a class="btn btn-primary" href="./">
+          Back to AI ONE
+        </a>
+
       </div>
+
     `;
+
     return;
+
   }
 
   document.title = tool.name + " — AI ONE";
 
   const featuresHTML = tool.features.length
+
     ? tool.features.map(feature => `
+
         <li>${escapeHTML(feature)}</li>
+
       `).join("")
-    : `<li>Explore the official website for more information.</li>`;
+
+    : `
+
+        <li>
+          Explore the official website for more information.
+        </li>
+
+      `;
 
   const website = safeURL(tool.url);
 
+  const websiteButton = website
+
+    ? `
+
+        <a
+          class="btn btn-primary"
+          href="${escapeHTML(website)}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Visit Official Website ↗
+        </a>
+
+      `
+
+    : `
+
+        <span class="btn btn-secondary" aria-disabled="true">
+          Official website unavailable
+        </span>
+
+      `;
+
   main.innerHTML = `
+
     <section class="detail-wrap">
+
       <div class="container">
-        <a class="back-link" href="./">← Back to All AI Tools</a>
+
+        <a class="back-link" href="./">
+          ← Back to All AI Tools
+        </a>
 
         <article class="detail-card">
-          <div class="detail-icon">${escapeHTML(tool.letter)}</div>
 
-          <div class="detail-category">${escapeHTML(tool.category)}</div>
+          <div class="detail-icon">
+            ${escapeHTML(tool.letter)}
+          </div>
+
+          <div class="detail-category">
+            ${escapeHTML(tool.category)}
+          </div>
 
           <h1>${escapeHTML(tool.name)}</h1>
 
-          <p class="detail-description">${escapeHTML(tool.description)}</p>
+          <p class="detail-description">
+            ${escapeHTML(tool.description)}
+          </p>
 
           <h2>About ${escapeHTML(tool.name)}</h2>
+
           <p>${escapeHTML(tool.about)}</p>
 
           <h2>Key Features</h2>
-          <ul class="feature-list">${featuresHTML}</ul>
+
+          <ul class="feature-list">
+            ${featuresHTML}
+          </ul>
 
           <div class="detail-actions">
-            <a
-              class="btn btn-primary"
-              href="${escapeHTML(website)}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >Visit Official Website ↗</a>
 
-            <a class="btn btn-secondary" href="./">Explore More Tools</a>
+            ${websiteButton}
+
+            <a class="btn btn-secondary" href="./">
+              Explore More Tools
+            </a>
+
           </div>
+
         </article>
+
       </div>
+
     </section>
+
   `;
+
 }
 
 /* START THE APPLICATION */
+
 loadTools();
 
 </script>
+
 </body>
 </html>
