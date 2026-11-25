@@ -1,12 +1,38 @@
 
+function json(data, status = 200, extraHeaders = {}) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      "X-Content-Type-Options": "nosniff",
+      ...extraHeaders
+    }
+  });
+}
+
+function base64UrlEncode(bytes) {
+  let binary = "";
+
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+
+  return btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
+}
+
 function constantTimeEqual(a, b) {
   const encoder = new TextEncoder();
   const x = encoder.encode(a);
   const y = encoder.encode(b);
 
   let diff = x.length ^ y.length;
+  const length = Math.max(x.length, y.length);
 
-  for (let i = 0; i < Math.max(x.length, y.length); i++) {
+  for (let i = 0; i < length; i++) {
     diff |= (x[i] || 0) ^ (y[i] || 0);
   }
 
@@ -14,17 +40,19 @@ function constantTimeEqual(a, b) {
 }
 
 async function signToken(payload, secret) {
-  const data = btoa(JSON.stringify(payload))
-    .replace(/=/g, "")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_");
-
   const key = await crypto.subtle.importKey(
     "raw",
     new TextEncoder().encode(secret),
-    { name: "HMAC", hash: "SHA-256" },
+    {
+      name: "HMAC",
+      hash: "SHA-256"
+    },
     false,
     ["sign"]
+  );
+
+  const data = base64UrlEncode(
+    new TextEncoder().encode(JSON.stringify(payload))
   );
 
   const signature = await crypto.subtle.sign(
@@ -33,37 +61,40 @@ async function signToken(payload, secret) {
     new TextEncoder().encode(data)
   );
 
-  const sig = btoa(
-    String.fromCharCode(...new Uint8Array(signature))
-  )
-    .replace(/=/g, "")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_");
-
-  return `${data}.${sig}`;
+  return data + "." +
+    base64UrlEncode(new Uint8Array(signature));
 }
 
 async function hashIP(ip, secret) {
-  const data = new TextEncoder().encode(`${secret}:${ip}`);
-  const digest = await crypto.subtle.digest("SHA-256", data);
+  const input = new TextEncoder().encode(
+    ip + ":" + secret
+  );
+
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    input
+  );
 
   return Array.from(new Uint8Array(digest))
     .map(byte => byte.toString(16).padStart(2, "0"))
     .join("");
 }
 
-function jsonResponse(data, status) {
-  return Response.json(data, {
-    status,
-    headers: {
-      "Cache-Control": "no-store"
-    }
-  });
-}
+async function readLimitedBody(request, limit = 2048) {
+  const contentLength = request.headers.get("Content-Length");
 
-async function readLimitedBody(request, maxBytes) {
+  if (contentLength !== null) {
+    if (!/^\d+$/.test(contentLength)) {
+      throw new Error("Invalid content length");
+    }
+
+    if (Number(contentLength) > limit) {
+      throw new Error("Request too large");
+    }
+  }
+
   if (!request.body) {
-    throw new Error("Missing request body");
+    throw new Error("Missing body");
   }
 
   const reader = request.body.getReader();
@@ -78,7 +109,7 @@ async function readLimitedBody(request, maxBytes) {
 
       total += value.byteLength;
 
-      if (total > maxBytes) {
+      if (total > limit) {
         await reader.cancel();
         throw new Error("Request too large");
       }
@@ -89,167 +120,199 @@ async function readLimitedBody(request, maxBytes) {
     reader.releaseLock();
   }
 
-  const bytes = new Uint8Array(total);
+  const result = new Uint8Array(total);
   let offset = 0;
 
   for (const chunk of chunks) {
-    bytes.set(chunk, offset);
+    result.set(chunk, offset);
     offset += chunk.byteLength;
   }
 
-  return new TextDecoder().decode(bytes);
+  return new TextDecoder("utf-8", {
+    fatal: true
+  }).decode(result);
 }
 
 export async function onRequestPost({ request, env }) {
   try {
-    if (!env.ADMIN_PASSWORD || !env.SESSION_SECRET || !env.DB) {
-      return jsonResponse(
-        { success: false, message: "Server configuration missing" },
-        500
-      );
+    if (
+      typeof env.ADMIN_PASSWORD !== "string" ||
+      !env.ADMIN_PASSWORD ||
+      typeof env.SESSION_SECRET !== "string" ||
+      !env.SESSION_SECRET ||
+      !env.DB
+    ) {
+      return json({
+        success: false,
+        message: "Authentication service unavailable"
+      }, 500);
+    }
+
+    if (
+      request.headers.get("Content-Type")
+        ?.split(";")[0]
+        .trim()
+        .toLowerCase() !== "application/json"
+    ) {
+      return json({
+        success: false,
+        message: "JSON content type required"
+      }, 415);
     }
 
     const ip = request.headers.get("CF-Connecting-IP");
 
-    if (!ip) {
-      return jsonResponse(
-        { success: false, message: "Request could not be verified" },
-        400
-      );
+    if (!ip || ip.length > 100) {
+      return json({
+        success: false,
+        message: "Unable to process request"
+      }, 400);
     }
 
-    const ipHash = await hashIP(ip, env.SESSION_SECRET);
     const now = Math.floor(Date.now() / 1000);
+    const ipHash = await hashIP(
+      ip,
+      env.SESSION_SECRET
+    );
 
-    const existing = await env.DB.prepare(
-      "SELECT blocked_until FROM admin_login_attempts WHERE ip_hash = ?"
-    ).bind(ipHash).first();
+    const existing = await env.DB.prepare(`
+      SELECT attempts, window_started_at, blocked_until
+      FROM admin_login_attempts
+      WHERE ip_hash = ?
+    `).bind(ipHash).first();
 
     if (existing && existing.blocked_until > now) {
-      return jsonResponse(
-        { success: false, message: "Too many attempts. Try again later." },
-        429
-      );
+      return json({
+        success: false,
+        message: "Too many attempts. Try again later."
+      }, 429, {
+        "Retry-After": String(existing.blocked_until - now)
+      });
     }
-
-    const contentLength = request.headers.get("Content-Length");
-
-    if (contentLength !== null) {
-      const length = Number(contentLength);
-
-      if (!Number.isSafeInteger(length) || length < 0 || length > 2048) {
-        return jsonResponse(
-          { success: false, message: "Request too large" },
-          413
-        );
-      }
-    }
-
-    const rawBody = await readLimitedBody(request, 2048);
 
     let body;
 
     try {
-      body = JSON.parse(rawBody);
+      body = await readLimitedBody(request);
     } catch {
-      return jsonResponse(
-        { success: false, message: "Invalid request" },
-        400
-      );
+      return json({
+        success: false,
+        message: "Invalid or oversized request"
+      }, 400);
+    }
+
+    let data;
+
+    try {
+      data = JSON.parse(body);
+    } catch {
+      return json({
+        success: false,
+        message: "Invalid JSON"
+      }, 400);
     }
 
     if (
-      !body ||
-      typeof body !== "object" ||
-      Array.isArray(body) ||
-      typeof body.password !== "string" ||
-      body.password.length > 1024
+      !data ||
+      typeof data !== "object" ||
+      Array.isArray(data) ||
+      typeof data.password !== "string" ||
+      data.password.length === 0 ||
+      data.password.length > 1024
     ) {
-      return jsonResponse(
-        { success: false, message: "Invalid credentials" },
-        401
-      );
+      return json({
+        success: false,
+        message: "Invalid password input"
+      }, 400);
     }
 
-    if (!constantTimeEqual(body.password, env.ADMIN_PASSWORD)) {
+    if (!constantTimeEqual(
+      data.password,
+      env.ADMIN_PASSWORD
+    )) {
       const result = await env.DB.prepare(`
-        INSERT INTO admin_login_attempts
-          (ip_hash, attempts, window_started_at, blocked_until, updated_at)
+        INSERT INTO admin_login_attempts (
+          ip_hash,
+          attempts,
+          window_started_at,
+          blocked_until,
+          updated_at
+        )
         VALUES (?, 1, ?, 0, ?)
+
         ON CONFLICT(ip_hash) DO UPDATE SET
           attempts = CASE
-            WHEN excluded.updated_at - window_started_at >= 900
+            WHEN admin_login_attempts.window_started_at <= ? - 900
             THEN 1
-            ELSE attempts + 1
+            ELSE admin_login_attempts.attempts + 1
           END,
+
           window_started_at = CASE
-            WHEN excluded.updated_at - window_started_at >= 900
-            THEN excluded.updated_at
-            ELSE window_started_at
+            WHEN admin_login_attempts.window_started_at <= ? - 900
+            THEN ?
+            ELSE admin_login_attempts.window_started_at
           END,
+
           blocked_until = CASE
-            WHEN (
-              CASE
-                WHEN excluded.updated_at - window_started_at >= 900
-                THEN 1
-                ELSE attempts + 1
-              END
-            ) >= 5
-            THEN excluded.updated_at + 900
-            ELSE 0
+            WHEN admin_login_attempts.window_started_at <= ? - 900
+            THEN 0
+            WHEN admin_login_attempts.attempts + 1 >= 5
+            THEN ? + 900
+            ELSE admin_login_attempts.blocked_until
           END,
-          updated_at = excluded.updated_at
+
+          updated_at = ?
+
         RETURNING attempts, blocked_until
-      `).bind(ipHash, now, now).first();
+      `).bind(
+        ipHash,
+        now,
+        now,
+        now,
+        now,
+        now,
+        now,
+        now
+      ).first();
 
       if (result && result.blocked_until > now) {
-        return jsonResponse(
-          { success: false, message: "Too many attempts. Try again later." },
-          429
-        );
+        return json({
+          success: false,
+          message: "Too many attempts. Try again later."
+        }, 429, {
+          "Retry-After": String(result.blocked_until - now)
+        });
       }
 
-      return jsonResponse(
-        { success: false, message: "Invalid credentials" },
-        401
-      );
+      return json({
+        success: false,
+        message: "Invalid administrator password"
+      }, 401);
     }
 
-    await env.DB.prepare(
-      "DELETE FROM admin_login_attempts WHERE ip_hash = ?"
-    ).bind(ipHash).run();
+    await env.DB.prepare(`
+      DELETE FROM admin_login_attempts
+      WHERE ip_hash = ?
+    `).bind(ipHash).run();
 
     const token = await signToken({
       role: "admin",
       exp: now + 3600
     }, env.SESSION_SECRET);
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: "Login successful"
-      }),
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-store",
-          "Set-Cookie":
-            `ai_one_session=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600`
-        }
-      }
-    );
+    return json({
+      success: true,
+      message: "Login successful"
+    }, 200, {
+      "Set-Cookie":
+        "ai_one_session=" + token +
+        "; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600"
+    });
 
-  } catch (error) {
-    if (error.message === "Request too large") {
-      return jsonResponse(
-        { success: false, message: "Request too large" },
-        413
-      );
-    }
-
-    return jsonResponse(
-      { success: false, message: "Login failed" },
-      500
-    );
+  } catch {
+    return json({
+      success: false,
+      message: "Unable to process login"
+    }, 500);
   }
 }
