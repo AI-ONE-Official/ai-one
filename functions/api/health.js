@@ -1,17 +1,20 @@
+
 export async function onRequestGet({ env }) {
   try {
-    const result = await env.DB.prepare(
-      "SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name"
-    ).all();
+    await env.DB.prepare("SELECT 1").first();
 
     return new Response(
       JSON.stringify({
         success: true,
-        message: "AI ONE Backend connected successfully",
-        tables: result.results.map(row => row.name)
+        message: "AI ONE Backend connected successfully"
       }),
       {
-        headers: { "Content-Type": "application/json" }
+        status: 200,
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "no-store",
+          "X-Content-Type-Options": "nosniff"
+        }
       }
     );
   } catch (error) {
@@ -22,7 +25,11 @@ export async function onRequestGet({ env }) {
       }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json" }
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "no-store",
+          "X-Content-Type-Options": "nosniff"
+        }
       }
     );
   }
