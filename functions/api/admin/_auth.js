@@ -1,24 +1,80 @@
 
+function decodeBase64Url(value) {
+  if (
+    typeof value !== "string" ||
+    !/^[A-Za-z0-9_-]+$/.test(value)
+  ) {
+    return null;
+  }
+
+  const normalized = value
+    .replace(/-/g, "+")
+    .replace(/_/g, "/");
+
+  const padded = normalized +
+    "=".repeat((4 - normalized.length % 4) % 4);
+
+  try {
+    const binary = atob(padded);
+    const bytes = Uint8Array.from(
+      binary,
+      char => char.charCodeAt(0)
+    );
+
+    let encoded = "";
+    for (const byte of bytes) {
+      encoded += String.fromCharCode(byte);
+    }
+
+    const canonical = btoa(encoded)
+      .replace(/=/g, "")
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_");
+
+    if (canonical !== value) {
+      return null;
+    }
+
+    return bytes;
+  } catch {
+    return null;
+  }
+}
+
 export async function isAdminAuthenticated(request, env) {
   try {
-    if (!env.SESSION_SECRET) {
+    if (
+      !env ||
+      typeof env.SESSION_SECRET !== "string" ||
+      env.SESSION_SECRET.length === 0
+    ) {
       return false;
     }
 
-    const cookie = request.headers.get("Cookie") || "";
+    const cookieHeader = request.headers.get("Cookie");
 
-    const sessionCookie = cookie
-      .split(";")
+    if (
+      !cookieHeader ||
+      cookieHeader.length > 8192
+    ) {
+      return false;
+    }
+
+    const cookies = cookieHeader.split(";")
       .map(item => item.trim())
-      .find(item => item.startsWith("ai_one_session="));
+      .filter(item => item.startsWith("ai_one_session="));
 
-    if (!sessionCookie) {
+    if (cookies.length !== 1) {
       return false;
     }
 
-    const token = sessionCookie.substring(
+    const token = cookies[0].slice(
       "ai_one_session=".length
     );
+
+    if (!token || token.length > 2048) {
+      return false;
+    }
 
     const parts = token.split(".");
 
@@ -27,6 +83,26 @@ export async function isAdminAuthenticated(request, env) {
     }
 
     const [data, signature] = parts;
+
+    if (
+      !data ||
+      data.length > 1024 ||
+      !signature ||
+      signature.length !== 43
+    ) {
+      return false;
+    }
+
+    const signatureBytes = decodeBase64Url(signature);
+    const payloadBytes = decodeBase64Url(data);
+
+    if (
+      !signatureBytes ||
+      signatureBytes.length !== 32 ||
+      !payloadBytes
+    ) {
+      return false;
+    }
 
     const key = await crypto.subtle.importKey(
       "raw",
@@ -37,19 +113,6 @@ export async function isAdminAuthenticated(request, env) {
       },
       false,
       ["verify"]
-    );
-
-    const normalizedSignature = signature
-      .replace(/-/g, "+")
-      .replace(/_/g, "/");
-
-    const paddedSignature =
-      normalizedSignature +
-      "=".repeat((4 - normalizedSignature.length % 4) % 4);
-
-    const signatureBytes = Uint8Array.from(
-      atob(paddedSignature),
-      char => char.charCodeAt(0)
     );
 
     const validSignature = await crypto.subtle.verify(
@@ -63,19 +126,19 @@ export async function isAdminAuthenticated(request, env) {
       return false;
     }
 
-    const normalizedData = data
-      .replace(/-/g, "+")
-      .replace(/_/g, "/");
+    const payloadText = new TextDecoder(
+      "utf-8",
+      { fatal: true }
+    ).decode(payloadBytes);
 
-    const paddedData =
-      normalizedData +
-      "=".repeat((4 - normalizedData.length % 4) % 4);
-
-    const payload = JSON.parse(atob(paddedData));
+    const payload = JSON.parse(payloadText);
 
     if (
+      !payload ||
+      typeof payload !== "object" ||
+      Array.isArray(payload) ||
       payload.role !== "admin" ||
-      typeof payload.exp !== "number" ||
+      !Number.isSafeInteger(payload.exp) ||
       payload.exp <= Math.floor(Date.now() / 1000)
     ) {
       return false;
