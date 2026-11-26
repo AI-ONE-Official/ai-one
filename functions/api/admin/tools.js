@@ -1,7 +1,18 @@
-
 import { isAdminAuthenticated } from "./_auth.js";
 
 const ALLOWED_ORIGIN = "https://ai-one-a2u.pages.dev";
+
+const ALLOWED_CATEGORIES = new Set([
+  "BUSINESS",
+  "CODING",
+  "EDUCATION",
+  "IMAGES",
+  "MARKETING",
+  "PRODUCTIVITY",
+  "RESEARCH",
+  "VIDEO & AUDIO",
+  "WRITING"
+]);
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -121,6 +132,18 @@ function getString(value, maxLength, fallback = "") {
   return result;
 }
 
+function normalizeCategory(value) {
+  const category = getString(value, 80)
+    .replace(/\s+/g, " ")
+    .toUpperCase();
+
+  if (!ALLOWED_CATEGORIES.has(category)) {
+    throw new Error("Invalid category");
+  }
+
+  return category;
+}
+
 function normalizeFeatures(value) {
   let items = [];
 
@@ -197,9 +220,9 @@ function validateUrl(value) {
 
 function prepareTool(data) {
   const name = getString(data.name, 120);
-  const category = getString(data.category, 80);
+  const category = normalizeCategory(data.category);
 
-  if (!name || !category) {
+  if (!name) {
     throw new Error("Name and category are required");
   }
 
@@ -395,6 +418,7 @@ export async function onRequestPost({ request, env }) {
 
     if (
       error.message === "Name and category are required" ||
+      error.message === "Invalid category" ||
       error.message === "Invalid slug" ||
       error.message === "Invalid website URL" ||
       error.message === "Website URL must use HTTPS" ||
@@ -511,6 +535,7 @@ export async function onRequestPut({ request, env }) {
     const validationMessages = [
       "Tool ID is required",
       "Name and category are required",
+      "Invalid category",
       "Invalid slug",
       "Invalid website URL",
       "Website URL must use HTTPS",
