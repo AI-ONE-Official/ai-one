@@ -46,7 +46,8 @@ export async function isAdminAuthenticated(request, env) {
     if (
       !env ||
       typeof env.SESSION_SECRET !== "string" ||
-      env.SESSION_SECRET.length === 0
+      env.SESSION_SECRET.length === 0 ||
+      !env.DB
     ) {
       return false;
     }
@@ -138,9 +139,29 @@ export async function isAdminAuthenticated(request, env) {
       typeof payload !== "object" ||
       Array.isArray(payload) ||
       payload.role !== "admin" ||
+      typeof payload.sid !== "string" ||
+      !/^[0-9a-f-]{36}$/i.test(payload.sid) ||
       !Number.isSafeInteger(payload.exp) ||
       payload.exp <= Math.floor(Date.now() / 1000)
     ) {
+      return false;
+    }
+
+    const session = await env.DB.prepare(`
+      SELECT session_id
+      FROM admin_sessions
+      WHERE session_id = ?
+        AND expires_at = ?
+        AND revoked_at IS NULL
+        AND expires_at > ?
+      LIMIT 1
+    `).bind(
+      payload.sid,
+      payload.exp,
+      Math.floor(Date.now() / 1000)
+    ).first();
+
+    if (!session) {
       return false;
     }
 
