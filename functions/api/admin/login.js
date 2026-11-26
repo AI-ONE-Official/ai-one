@@ -171,6 +171,7 @@ export async function onRequestPost({ request, env }) {
     }
 
     const now = Math.floor(Date.now() / 1000);
+
     const ipHash = await hashIP(
       ip,
       env.SESSION_SECRET
@@ -239,7 +240,7 @@ export async function onRequestPost({ request, env }) {
           blocked_until,
           updated_at
         )
-        VALUES (?, 1, 0, 0, ?)
+        VALUES (?, 1, ?, 0, ?)
 
         ON CONFLICT(ip_hash) DO UPDATE SET
           attempts = CASE
@@ -273,6 +274,7 @@ export async function onRequestPost({ request, env }) {
         now,
         now,
         now,
+        now,
         now
       ).first();
 
@@ -291,6 +293,7 @@ export async function onRequestPost({ request, env }) {
       }, 401);
     }
 
+    // Clear failed attempts after successful authentication.
     await env.DB.prepare(`
       DELETE FROM admin_login_attempts
       WHERE ip_hash = ?
