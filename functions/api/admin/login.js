@@ -239,7 +239,7 @@ export async function onRequestPost({ request, env }) {
           blocked_until,
           updated_at
         )
-        VALUES (?, 1, ?, 0, ?)
+        VALUES (?, 1, 0, 0, ?)
 
         ON CONFLICT(ip_hash) DO UPDATE SET
           attempts = CASE
@@ -319,12 +319,23 @@ export async function onRequestPost({ request, env }) {
       now
     ).run();
 
-    // Clean up revoked and expired sessions.
-    await env.DB.prepare(`
-      DELETE FROM admin_sessions
-      WHERE revoked_at IS NOT NULL
-         OR expires_at <= ?
-    `).bind(now).run();
+    // Best-effort cleanup: maintenance must not block login.
+    try {
+      await env.DB.batch([
+        env.DB.prepare(`
+          DELETE FROM admin_sessions
+          WHERE revoked_at IS NOT NULL
+             OR expires_at <= ?
+        `).bind(now),
+
+        env.DB.prepare(`
+          DELETE FROM admin_login_attempts
+          WHERE updated_at <= ?
+        `).bind(now - 86400)
+      ]);
+    } catch {
+      // Login remains valid if cleanup fails.
+    }
 
     return json({
       success: true,
