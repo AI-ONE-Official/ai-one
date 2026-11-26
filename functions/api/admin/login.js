@@ -319,6 +319,13 @@ export async function onRequestPost({ request, env }) {
       now
     ).run();
 
+    // Clean up revoked and expired sessions.
+    await env.DB.prepare(`
+      DELETE FROM admin_sessions
+      WHERE revoked_at IS NOT NULL
+         OR expires_at <= ?
+    `).bind(now).run();
+
     return json({
       success: true,
       message: "Login successful"
