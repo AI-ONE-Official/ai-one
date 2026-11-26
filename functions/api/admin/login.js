@@ -136,6 +136,7 @@ async function readLimitedBody(request, limit = 2048) {
 export async function onRequestPost({ request, env }) {
   try {
     if (
+      !env ||
       typeof env.ADMIN_PASSWORD !== "string" ||
       !env.ADMIN_PASSWORD ||
       typeof env.SESSION_SECRET !== "string" ||
@@ -295,10 +296,28 @@ export async function onRequestPost({ request, env }) {
       WHERE ip_hash = ?
     `).bind(ipHash).run();
 
+    const sessionId = crypto.randomUUID();
+    const expiresAt = now + 3600;
+
     const token = await signToken({
       role: "admin",
-      exp: now + 3600
+      sid: sessionId,
+      exp: expiresAt
     }, env.SESSION_SECRET);
+
+    await env.DB.prepare(`
+      INSERT INTO admin_sessions (
+        session_id,
+        expires_at,
+        revoked_at,
+        created_at
+      )
+      VALUES (?, ?, NULL, ?)
+    `).bind(
+      sessionId,
+      expiresAt,
+      now
+    ).run();
 
     return json({
       success: true,
