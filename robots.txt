@@ -3,3 +3,5 @@ Allow: /
 
 Disallow: /admin/
 Disallow: /api/
+
+Sitemap: https://ai-one-a2u.pages.dev/sitemap.xml
