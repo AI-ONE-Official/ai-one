@@ -6,10 +6,10 @@
 <meta name="theme-color" content="#070b12">
 <meta name="description" content="Discover powerful AI tools for creating, learning, working and innovating. Explore AI ONE, your destination for artificial intelligence tools.">
 <meta name="robots" content="index, follow">
+<link rel="canonical" href="https://ai-one-a2u.pages.dev/">
 
 <title>AI ONE — Discover Intelligence</title>
 
-<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AI ONE">
 <meta property="og:title" content="AI ONE — Discover Intelligence">
@@ -20,11 +20,20 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 
-<!-- Twitter Cards -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="AI ONE — Discover Intelligence">
 <meta name="twitter:description" content="Discover powerful AI tools in one destination. Explore, create, learn and innovate with AI ONE.">
 <meta name="twitter:image" content="https://ai-one-a2u.pages.dev/ai-one-og-image(1).png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "AI ONE",
+  "url": "https://ai-one-a2u.pages.dev/",
+  "description": "Discover powerful AI tools for creating, learning, working and innovating."
+}
+</script>
 
 <style>
 :root{
@@ -52,7 +61,6 @@ button,input{font:inherit}
 button{cursor:pointer}
 .container{width:min(1160px,92%);margin:auto}
 
-/* ACCESSIBILITY */
 :focus-visible{
   outline:2px solid var(--blue2);
   outline-offset:4px;
@@ -69,7 +77,6 @@ button{cursor:pointer}
 }
 .skip-link:focus{left:10px}
 
-/* HEADER */
 header{
   position:sticky;
   top:0;
@@ -127,7 +134,6 @@ header{
   border-radius:10px;
 }
 
-/* HERO */
 .hero{
   position:relative;
   padding:100px 0 75px;
@@ -226,7 +232,6 @@ header{
   font-weight:bold;
 }
 
-/* SECTIONS */
 section{padding:55px 0}
 .section-heading{margin-bottom:27px}
 .section-heading h2{
@@ -246,7 +251,6 @@ section{padding:55px 0}
   margin-bottom:8px;
 }
 
-/* FEATURED */
 .featured-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -295,7 +299,6 @@ section{padding:55px 0}
   margin-top:16px;
 }
 
-/* SEARCH */
 .explore-section{border-top:1px solid var(--border)}
 .search-panel{
   padding:20px;
@@ -378,7 +381,6 @@ section{padding:55px 0}
 }
 .results-line strong{color:var(--blue2)}
 
-/* TOOL CARDS */
 .tools-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -452,7 +454,6 @@ section{padding:55px 0}
   margin-bottom:8px;
 }
 
-/* STATUS */
 .loading-state,.error-state{
   text-align:center;
   padding:45px 15px;
@@ -476,7 +477,6 @@ section{padding:55px 0}
   background:var(--blue);
 }
 
-/* ABOUT */
 .about-box{
   padding:40px;
   border:1px solid var(--border);
@@ -508,7 +508,6 @@ section{padding:55px 0}
   font-size:12px!important;
 }
 
-/* DETAILS */
 .detail-wrap{min-height:75vh;padding:45px 0 75px}
 .back-link{
   display:inline-block;
@@ -575,7 +574,6 @@ section{padding:55px 0}
 }
 .not-found{text-align:center;padding:80px 15px}
 
-/* FOOTER */
 footer{
   border-top:1px solid var(--border);
   padding:35px 0;
@@ -608,7 +606,6 @@ footer{
 }
 .footer-contact a:hover{text-decoration:underline}
 
-/* MOBILE */
 @media(max-width:800px){
   .featured-grid,.tools-grid{grid-template-columns:repeat(2,1fr)}
   .stats{gap:35px}
@@ -653,8 +650,6 @@ footer{
   .detail-actions{flex-direction:column}
   .detail-actions .btn{width:100%}
 }
-
-/* REDUCED MOTION */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{
@@ -686,15 +681,252 @@ footer{
   </div>
 </header>
 
+<!--
+  Initial server-readable content.
+  JavaScript refreshes this directory using the live API.
+-->
+
 <main id="mainContent" aria-live="polite">
-  <div class="container" style="padding:80px 0">
-    <div class="loading-state">Loading AI ONE tools...</div>
-  </div>
+
+  <section class="hero">
+    <div class="container">
+      <div class="eyebrow">✦ THE FUTURE OF INTELLIGENCE</div>
+
+      <h1>
+        One Destination.<br>
+        <span class="gradient-text">Endless AI Possibilities.</span>
+      </h1>
+
+      <p>
+        Discover powerful artificial intelligence tools
+        that help you create, work, learn and innovate.
+        Explore AI ONE, one destination for discovering AI tools.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#tools">Explore AI Tools →</a>
+        <a class="btn btn-secondary" href="#featured">Discover Featured</a>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <strong>17</strong>
+          <span>AI TOOLS</span>
+        </div>
+        <div class="stat">
+          <strong>09</strong>
+          <span>CATEGORIES</span>
+        </div>
+        <div class="stat">
+          <strong>01</strong>
+          <span>DESTINATION</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="featured">
+    <div class="container">
+      <div class="section-heading">
+        <div class="section-label">HANDPICKED FOR YOU</div>
+        <h2>Featured AI Tools</h2>
+        <p>Explore useful artificial intelligence tools for everyday tasks and creative projects.</p>
+      </div>
+
+      <div class="featured-grid">
+        <a class="featured-card" href="?tool=chatgpt">
+          <span class="featured-tag">✦ FEATURED TOOL</span>
+          <h3>ChatGPT</h3>
+          <p>An AI assistant for writing, learning, brainstorming and problem solving.</p>
+          <span class="featured-link">Explore ChatGPT →</span>
+        </a>
+
+        <a class="featured-card" href="?tool=google-gemini">
+          <span class="featured-tag">✦ FEATURED TOOL</span>
+          <h3>Google Gemini</h3>
+          <p>An AI assistant for research, creativity and everyday productivity.</p>
+          <span class="featured-link">Explore Google Gemini →</span>
+        </a>
+
+        <a class="featured-card" href="?tool=claude">
+          <span class="featured-tag">✦ FEATURED TOOL</span>
+          <h3>Claude</h3>
+          <p>An AI assistant for writing, analysis and working with information.</p>
+          <span class="featured-link">Explore Claude →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="explore-section" id="tools">
+    <div class="container">
+      <div class="section-heading">
+        <div class="section-label">EXPLORE THE COLLECTION</div>
+        <h2>Explore AI Tools</h2>
+        <p>Discover 17 AI tools across nine categories, including writing, research, coding, education and creativity.</p>
+      </div>
+
+      <div class="tools-grid">
+
+        <a class="tool-card" href="?tool=chatgpt">
+          <div class="tool-top"><div class="tool-icon">C</div><span class="tool-category">WRITING</span></div>
+          <h3>ChatGPT</h3>
+          <p>AI assistance for writing, learning, brainstorming and productivity.</p>
+          <span class="card-link">Explore ChatGPT →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=google-gemini">
+          <div class="tool-top"><div class="tool-icon">G</div><span class="tool-category">PRODUCTIVITY</span></div>
+          <h3>Google Gemini</h3>
+          <p>AI assistance for research, creativity and everyday tasks.</p>
+          <span class="card-link">Explore Google Gemini →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=leonardo-ai">
+          <div class="tool-top"><div class="tool-icon">L</div><span class="tool-category">IMAGES</span></div>
+          <h3>Leonardo AI</h3>
+          <p>AI-powered image creation and visual design.</p>
+          <span class="card-link">Explore Leonardo AI →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=claude">
+          <div class="tool-top"><div class="tool-icon">C</div><span class="tool-category">WRITING</span></div>
+          <h3>Claude</h3>
+          <p>AI assistance for writing, analysis and complex tasks.</p>
+          <span class="card-link">Explore Claude →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=midjourney">
+          <div class="tool-top"><div class="tool-icon">M</div><span class="tool-category">IMAGES</span></div>
+          <h3>Midjourney</h3>
+          <p>AI image generation for creative visual projects.</p>
+          <span class="card-link">Explore Midjourney →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=notion-ai">
+          <div class="tool-top"><div class="tool-icon">N</div><span class="tool-category">PRODUCTIVITY</span></div>
+          <h3>Notion AI</h3>
+          <p>AI-powered support for notes, documents and productivity.</p>
+          <span class="card-link">Explore Notion AI →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=github-copilot">
+          <div class="tool-top"><div class="tool-icon">G</div><span class="tool-category">CODING</span></div>
+          <h3>GitHub Copilot</h3>
+          <p>AI assistance for software development and coding.</p>
+          <span class="card-link">Explore GitHub Copilot →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=grammarly">
+          <div class="tool-top"><div class="tool-icon">G</div><span class="tool-category">WRITING</span></div>
+          <h3>Grammarly</h3>
+          <p>Writing assistance for clarity, grammar and communication.</p>
+          <span class="card-link">Explore Grammarly →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=perplexity">
+          <div class="tool-top"><div class="tool-icon">P</div><span class="tool-category">RESEARCH</span></div>
+          <h3>Perplexity</h3>
+          <p>AI-powered search and research assistance.</p>
+          <span class="card-link">Explore Perplexity →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=runway">
+          <div class="tool-top"><div class="tool-icon">R</div><span class="tool-category">VIDEO &amp; AUDIO</span></div>
+          <h3>Runway</h3>
+          <p>AI tools for video creation and creative production.</p>
+          <span class="card-link">Explore Runway →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=elevenlabs">
+          <div class="tool-top"><div class="tool-icon">E</div><span class="tool-category">VIDEO &amp; AUDIO</span></div>
+          <h3>ElevenLabs</h3>
+          <p>AI-powered voice and audio creation tools.</p>
+          <span class="card-link">Explore ElevenLabs →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=gamma">
+          <div class="tool-top"><div class="tool-icon">G</div><span class="tool-category">BUSINESS</span></div>
+          <h3>Gamma</h3>
+          <p>AI assistance for presentations and visual documents.</p>
+          <span class="card-link">Explore Gamma →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=canva">
+          <div class="tool-top"><div class="tool-icon">C</div><span class="tool-category">IMAGES</span></div>
+          <h3>Canva</h3>
+          <p>Visual design and creative content tools with AI features.</p>
+          <span class="card-link">Explore Canva →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=zapier-ai">
+          <div class="tool-top"><div class="tool-icon">Z</div><span class="tool-category">PRODUCTIVITY</span></div>
+          <h3>Zapier AI</h3>
+          <p>AI-powered workflow automation and productivity.</p>
+          <span class="card-link">Explore Zapier AI →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=hubspot-ai">
+          <div class="tool-top"><div class="tool-icon">H</div><span class="tool-category">MARKETING</span></div>
+          <h3>HubSpot AI</h3>
+          <p>AI features for business, marketing and customer engagement.</p>
+          <span class="card-link">Explore HubSpot AI →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=khanmigo">
+          <div class="tool-top"><div class="tool-icon">K</div><span class="tool-category">EDUCATION</span></div>
+          <h3>Khanmigo</h3>
+          <p>AI-powered educational guidance and learning support.</p>
+          <span class="card-link">Explore Khanmigo →</span>
+        </a>
+
+        <a class="tool-card" href="?tool=elicit">
+          <div class="tool-top"><div class="tool-icon">E</div><span class="tool-category">RESEARCH</span></div>
+          <h3>Elicit</h3>
+          <p>AI assistance for academic research and literature reviews.</p>
+          <span class="card-link">Explore Elicit →</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <div class="about-box">
+        <div class="section-label">ABOUT AI ONE</div>
+        <h2>One Platform. Endless Possibilities.</h2>
+        <p>
+          AI ONE brings powerful artificial intelligence tools
+          together in one destination, helping people discover
+          new ways to create, learn, work, research and innovate.
+        </p>
+
+        <a href="#tools" class="btn btn-primary">
+          Explore the Collection →
+        </a>
+
+        <div class="section-label" style="margin-top:30px">
+          GET IN TOUCH
+        </div>
+
+        <p>
+          Have a question, suggestion or business inquiry?
+          Contact the AI ONE team.
+        </p>
+
+        <a class="contact-email"
+           href="mailto:contactaione824@gmail.com?subject=Contact%20AI%20ONE">
+          contactaione824@gmail.com
+        </a>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer>
   <div class="container footer-inner">
-
     <div class="footer-brand">AI <span>ONE</span></div>
 
     <div class="footer-contact">
@@ -705,38 +937,23 @@ footer{
     </div>
 
     <div>© 2026 AI ONE. All rights reserved.</div>
-
     <div>One Platform. Endless Possibilities.</div>
-
   </div>
 </footer>
 
 <script>
 "use strict";
 
-/*
-  AI ONE
-  Public tools are loaded from the Cloudflare D1 API.
-
-  API endpoint: /api/tools
-
-  Contact:
-  contactaione824@gmail.com
-*/
-
 const API_URL = "/api/tools";
 const CONTACT_EMAIL = "contactaione824@gmail.com";
 
 const main = document.getElementById("mainContent");
-
 const params = new URLSearchParams(window.location.search);
 const selectedTool = params.get("tool");
 
 let tools = [];
 let activeCategory = "ALL";
 let loading = false;
-
-/* HTML ESCAPING */
 
 function escapeHTML(value){
   return String(value ?? "").replace(/[&<>"']/g, character => ({
@@ -748,16 +965,11 @@ function escapeHTML(value){
   })[character]);
 }
 
-/* URL VALIDATION */
-
 function safeURL(value){
   try{
     const url = new URL(String(value || "").trim());
 
-    if(
-      url.protocol === "https:" ||
-      url.protocol === "http:"
-    ){
+    if(url.protocol === "https:" || url.protocol === "http:"){
       return url.href;
     }
 
@@ -767,10 +979,7 @@ function safeURL(value){
   }
 }
 
-/* TOOL NORMALIZATION */
-
 function normalizeTool(tool){
-
   if(!tool || typeof tool !== "object"){
     return null;
   }
@@ -786,9 +995,7 @@ function normalizeTool(tool){
         .map(item => String(item).slice(0,500))
     : [];
 
-  const rawStatus = String(
-    tool.status || "active"
-  ).toLowerCase();
+  const rawStatus = String(tool.status || "active").toLowerCase();
 
   const featured =
     tool.featured === true ||
@@ -800,107 +1007,81 @@ function normalizeTool(tool){
     id: String(tool.id || tool.slug || ""),
     slug: String(tool.slug || tool.id || ""),
     name: name.slice(0,150),
-    category: String(
-      tool.category || "OTHER"
-    ).toUpperCase().slice(0,60),
-
-    letter: String(
-      tool.letter || name.charAt(0) || "A"
-    ).charAt(0).toUpperCase(),
-
+    category: String(tool.category || "OTHER").toUpperCase().slice(0,60),
+    letter: String(tool.letter || name.charAt(0) || "A").charAt(0).toUpperCase(),
     url: safeURL(tool.url),
-
-    description: String(
-      tool.description || ""
-    ).slice(0,2000),
-
-    about: String(
-      tool.about || tool.description || ""
-    ).slice(0,5000),
-
+    description: String(tool.description || "").slice(0,2000),
+    about: String(tool.about || tool.description || "").slice(0,5000),
     features,
-
     featured,
-
     status: rawStatus
   };
 }
 
-/* LOADING */
-
+/*
+  Do not replace the initial HTML with a loading message.
+  The readable directory remains visible while the API loads.
+*/
 function showLoading(){
-
-  main.innerHTML = `
-    <div class="container" style="padding:80px 0">
-      <div class="loading-state" role="status">
-        Loading AI ONE tools...
-      </div>
-    </div>
-  `;
+  // Initial HTML content remains visible.
 }
 
-/* ERROR HANDLING */
-
 function showLoadError(){
+  const oldMessage = document.getElementById("apiLoadError");
 
-  main.innerHTML = `
-    <div class="container" style="padding:80px 0">
-      <div class="error-state" role="alert">
+  if(oldMessage){
+    oldMessage.remove();
+  }
 
-        <strong>Unable to load AI ONE tools</strong>
+  const errorBox = document.createElement("div");
 
-        <p>
-          We could not connect to the tools database.
-          Please check your connection and try again.
-        </p>
+  errorBox.id = "apiLoadError";
+  errorBox.className = "container";
+  errorBox.style.padding = "15px 0";
 
-        <button type="button" id="retryLoad">
-          Try Again
-        </button>
-
-      </div>
+  errorBox.innerHTML = `
+    <div class="error-state" role="alert">
+      <strong>Unable to refresh AI ONE tools</strong>
+      <p>
+        The directory is still available.
+        Please check your connection and try again.
+      </p>
+      <button type="button" id="retryLoad">
+        Try Again
+      </button>
     </div>
   `;
+
+  main.prepend(errorBox);
 
   const retryButton = document.getElementById("retryLoad");
 
   if(retryButton){
-    retryButton.addEventListener("click", loadTools);
+    retryButton.addEventListener("click", () => {
+      errorBox.remove();
+      loadTools();
+    });
   }
 }
 
-/* LOAD DATABASE TOOLS */
-
 async function loadTools(){
-
   if(loading) return;
 
   loading = true;
-
   showLoading();
 
   try{
-
     const response = await fetch(API_URL, {
-
       method:"GET",
-
       cache:"no-store",
-
       credentials:"same-origin",
-
       headers:{
         "Accept":"application/json"
       }
-
     });
 
     if(!response.ok){
-
-      throw new Error(
-        "API request failed: " + response.status
-      );
-
+      throw new Error("API request failed: " + response.status);
     }
 
     const data = await response.json();
@@ -910,9 +1091,7 @@ async function loadTools(){
       data.success !== true ||
       !Array.isArray(data.tools)
     ){
-
       throw new Error("Invalid tools API response");
-
     }
 
     const normalized = data.tools
@@ -924,76 +1103,55 @@ async function loadTools(){
       tool.slug.trim().length > 0
     );
 
+    const errorMessage = document.getElementById("apiLoadError");
+
+    if(errorMessage){
+      errorMessage.remove();
+    }
+
     if(selectedTool){
-
       renderDetails(selectedTool);
-
     }else{
-
       renderHome();
-
     }
 
   }catch(error){
-
     console.error("AI ONE loading error:", error);
-
     showLoadError();
 
   }finally{
-
     loading = false;
-
   }
 }
 
-/* CATEGORIES */
-
 function getCategories(){
-
   return [
     "ALL",
-
     ...new Set(
       tools
         .map(tool => tool.category)
         .filter(Boolean)
         .sort()
     )
-
   ];
-
 }
 
-/* HOME PAGE */
-
 function renderHome(){
-
   document.title = "AI ONE — Discover Intelligence";
 
   const categories = getCategories();
-
   const categoryCount = categories.length - 1;
-
-  const featuredTools = tools.filter(
-    tool => tool.featured
-  );
+  const featuredTools = tools.filter(tool => tool.featured);
 
   main.innerHTML = `
 
     <section class="hero">
-
       <div class="container">
-
-        <div class="eyebrow">
-          ✦ THE FUTURE OF INTELLIGENCE
-        </div>
+        <div class="eyebrow">✦ THE FUTURE OF INTELLIGENCE</div>
 
         <h1>
           One Destination.<br>
-          <span class="gradient-text">
-            Endless AI Possibilities.
-          </span>
+          <span class="gradient-text">Endless AI Possibilities.</span>
         </h1>
 
         <p>
@@ -1002,88 +1160,53 @@ function renderHome(){
         </p>
 
         <div class="hero-actions">
-
           <a class="btn btn-primary" href="#tools">
             Explore AI Tools →
           </a>
-
           <a class="btn btn-secondary" href="#featured">
             Discover Featured
           </a>
-
         </div>
 
         <div class="stats">
-
           <div class="stat">
             <strong>${tools.length}</strong>
             <span>AI TOOLS</span>
           </div>
-
           <div class="stat">
             <strong>${String(categoryCount).padStart(2,"0")}</strong>
             <span>CATEGORIES</span>
           </div>
-
           <div class="stat">
             <strong>01</strong>
             <span>DESTINATION</span>
           </div>
-
         </div>
-
       </div>
-
     </section>
 
     <section id="featured">
-
       <div class="container">
-
         <div class="section-heading">
-
-          <div class="section-label">
-            HANDPICKED FOR YOU
-          </div>
-
+          <div class="section-label">HANDPICKED FOR YOU</div>
           <h2>Featured AI Tools</h2>
-
-          <p>
-            Explore some exciting tools in artificial intelligence.
-          </p>
-
+          <p>Explore some exciting tools in artificial intelligence.</p>
         </div>
-
         <div class="featured-grid" id="featuredGrid"></div>
-
       </div>
-
     </section>
 
     <section class="explore-section" id="tools">
-
       <div class="container">
-
         <div class="section-heading">
-
-          <div class="section-label">
-            EXPLORE THE COLLECTION
-          </div>
-
+          <div class="section-label">EXPLORE THE COLLECTION</div>
           <h2>Explore AI Tools</h2>
-
-          <p>
-            Find the right AI tool for your next idea.
-          </p>
-
+          <p>Find the right AI tool for your next idea.</p>
         </div>
 
         <div class="search-panel">
-
           <div class="search-box">
-
             <span class="search-icon" aria-hidden="true">⌕</span>
-
             <input
               id="searchInput"
               type="search"
@@ -1091,14 +1214,12 @@ function renderHome(){
               autocomplete="off"
               aria-label="Search AI tools"
             >
-
             <button
               class="clear-search"
               id="clearSearch"
               type="button"
               aria-label="Clear search"
             >×</button>
-
           </div>
 
           <div class="search-hint">
@@ -1106,11 +1227,8 @@ function renderHome(){
           </div>
 
           <div class="filter-heading">
-
             <strong>Browse by category</strong>
-
             <span>Choose a category</span>
-
           </div>
 
           <div
@@ -1118,45 +1236,27 @@ function renderHome(){
             id="filters"
             aria-label="Filter tools by category"
           ></div>
-
         </div>
 
         <div class="results-line">
-
-          <span id="resultsCount">
-            Showing ${tools.length} tools
-          </span>
-
+          <span id="resultsCount">Showing ${tools.length} tools</span>
           <span>AI ONE COLLECTION</span>
-
         </div>
 
         <div class="tools-grid" id="toolsGrid"></div>
 
         <div class="no-results" id="noResults" role="status">
-
           <strong>No tools found</strong>
-
           Try another search term or choose a different category.
-
         </div>
-
       </div>
-
     </section>
 
     <section id="about">
-
       <div class="container">
-
         <div class="about-box">
-
-          <div class="section-label">
-            ABOUT AI ONE
-          </div>
-
+          <div class="section-label">ABOUT AI ONE</div>
           <h2>One Platform. Endless Possibilities.</h2>
-
           <p>
             AI ONE brings powerful artificial intelligence tools
             together in one destination, helping everyone discover
@@ -1190,55 +1290,35 @@ function renderHome(){
           >
             ✉ Contact via Email
           </a>
-
         </div>
-
       </div>
-
     </section>
-
   `;
-
-  /* FEATURED TOOLS */
 
   const featuredGrid = document.getElementById("featuredGrid");
 
   featuredGrid.innerHTML = featuredTools.length
-
     ? featuredTools.map(tool => `
-
         <a
           class="featured-card"
           href="?tool=${encodeURIComponent(tool.slug)}"
         >
-
-          <span class="featured-tag">
-            ✦ FEATURED TOOL
-          </span>
-
+          <span class="featured-tag">✦ FEATURED TOOL</span>
           <h3>${escapeHTML(tool.name)}</h3>
-
           <p>${escapeHTML(tool.description)}</p>
-
           <span class="featured-link">
             Explore ${escapeHTML(tool.name)} →
           </span>
-
         </a>
-
       `).join("")
-
     : `
         <p style="color:var(--muted)">
           Featured tools will appear here.
         </p>
       `;
 
-  /* CATEGORY FILTERS */
-
   document.getElementById("filters").innerHTML =
     categories.map((category,index) => `
-
       <button
         type="button"
         class="filter-btn ${index === 0 ? "active" : ""}"
@@ -1247,90 +1327,59 @@ function renderHome(){
       >
         ${category === "ALL" ? "All Tools" : escapeHTML(category)}
       </button>
-
     `).join("");
 
   activeCategory = "ALL";
 
-  const searchInput =
-    document.getElementById("searchInput");
-
-  const clearButton =
-    document.getElementById("clearSearch");
-
-  /* SEARCH AND FILTER */
+  const searchInput = document.getElementById("searchInput");
+  const clearButton = document.getElementById("clearSearch");
 
   function updateTools(){
+    const query = searchInput.value.trim().toLowerCase();
 
-    const query = searchInput.value
-      .trim()
-      .toLowerCase();
-
-    clearButton.classList.toggle(
-      "show",
-      query.length > 0
-    );
+    clearButton.classList.toggle("show", query.length > 0);
 
     const filtered = tools.filter(tool => {
-
       const categoryMatch =
         activeCategory === "ALL" ||
         tool.category === activeCategory;
 
       const searchable = [
-
         tool.name,
         tool.category,
         tool.description,
         tool.about,
         ...tool.features
-
       ].join(" ").toLowerCase();
 
-      return (
-        categoryMatch &&
-        searchable.includes(query)
-      );
-
+      return categoryMatch && searchable.includes(query);
     });
 
     document.getElementById("toolsGrid").innerHTML =
       filtered.map(tool => `
-
         <a
           class="tool-card"
           href="?tool=${encodeURIComponent(tool.slug)}"
         >
-
           <div class="tool-top">
-
-            <div class="tool-icon">
-              ${escapeHTML(tool.letter)}
-            </div>
-
+            <div class="tool-icon">${escapeHTML(tool.letter)}</div>
             <span class="tool-category">
               ${escapeHTML(tool.category)}
             </span>
-
           </div>
 
           <h3>${escapeHTML(tool.name)}</h3>
-
           <p>${escapeHTML(tool.description)}</p>
 
           <span class="card-link">
             Explore ${escapeHTML(tool.name)} →
           </span>
-
         </a>
-
       `).join("");
 
     document.getElementById("resultsCount").innerHTML = `
-
       Showing <strong>${filtered.length}</strong>
       of ${tools.length} tools
-
     `;
 
     document.getElementById("noResults").style.display =
@@ -1338,28 +1387,18 @@ function renderHome(){
 
     document.getElementById("toolsGrid").style.display =
       filtered.length === 0 ? "none" : "grid";
-
   }
 
   searchInput.addEventListener("input", updateTools);
 
-  /* CLEAR SEARCH */
-
   clearButton.addEventListener("click", () => {
-
     searchInput.value = "";
-
     updateTools();
-
     searchInput.focus();
-
   });
-
-  /* CATEGORY BUTTONS */
 
   document.getElementById("filters")
     .addEventListener("click", event => {
-
       const button = event.target.closest(".filter-btn");
 
       if(!button) return;
@@ -1368,32 +1407,23 @@ function renderHome(){
 
       document.querySelectorAll(".filter-btn")
         .forEach(item => {
-
           const selected = item === button;
 
           item.classList.toggle("active", selected);
-
           item.setAttribute(
             "aria-pressed",
             selected ? "true" : "false"
           );
-
         });
 
       updateTools();
-
     });
 
   updateTools();
-
 }
 
-/* GLOBAL SEARCH SHORTCUT */
-
 document.addEventListener("keydown", event => {
-
-  const searchInput =
-    document.getElementById("searchInput");
+  const searchInput = document.getElementById("searchInput");
 
   if(!searchInput) return;
 
@@ -1406,90 +1436,57 @@ document.addEventListener("keydown", event => {
       document.activeElement?.tagName
     )
   ){
-
     event.preventDefault();
-
     searchInput.focus();
-
   }
 
   if(
     event.key === "Escape" &&
     document.activeElement === searchInput
   ){
-
     searchInput.value = "";
-
-    searchInput.dispatchEvent(
-      new Event("input")
-    );
-
+    searchInput.dispatchEvent(new Event("input"));
     searchInput.blur();
-
   }
-
 });
 
-/* TOOL DETAILS PAGE */
-
 function renderDetails(slug){
-
-  const tool = tools.find(item =>
-    item.slug === slug
-  );
+  const tool = tools.find(item => item.slug === slug);
 
   if(!tool){
-
     document.title = "Tool Not Found — AI ONE";
 
     main.innerHTML = `
-
       <div class="container not-found">
-
         <h1>Tool Not Found</h1>
-
         <p style="color:var(--muted);margin:12px 0 25px">
-
           The tool you are looking for could not be found.
-
         </p>
-
         <a class="btn btn-primary" href="./">
           Back to AI ONE
         </a>
-
       </div>
-
     `;
 
     return;
-
   }
 
   document.title = tool.name + " — AI ONE";
 
   const featuresHTML = tool.features.length
-
     ? tool.features.map(feature => `
-
         <li>${escapeHTML(feature)}</li>
-
       `).join("")
-
     : `
-
         <li>
           Explore the official website for more information.
         </li>
-
       `;
 
   const website = safeURL(tool.url);
 
   const websiteButton = website
-
     ? `
-
         <a
           class="btn btn-primary"
           href="${escapeHTML(website)}"
@@ -1498,21 +1495,15 @@ function renderDetails(slug){
         >
           Visit Official Website ↗
         </a>
-
       `
-
     : `
-
         <span class="btn btn-secondary" aria-disabled="true">
           Official website unavailable
         </span>
-
       `;
 
   main.innerHTML = `
-
     <section class="detail-wrap">
-
       <div class="container">
 
         <a class="back-link" href="./">
@@ -1520,7 +1511,6 @@ function renderDetails(slug){
         </a>
 
         <article class="detail-card">
-
           <div class="detail-icon">
             ${escapeHTML(tool.letter)}
           </div>
@@ -1536,36 +1526,25 @@ function renderDetails(slug){
           </p>
 
           <h2>About ${escapeHTML(tool.name)}</h2>
-
           <p>${escapeHTML(tool.about)}</p>
 
           <h2>Key Features</h2>
-
           <ul class="feature-list">
             ${featuresHTML}
           </ul>
 
           <div class="detail-actions">
-
             ${websiteButton}
 
             <a class="btn btn-secondary" href="./">
               Explore More Tools
             </a>
-
           </div>
-
         </article>
-
       </div>
-
     </section>
-
   `;
-
 }
-
-/* START THE APPLICATION */
 
 loadTools();
 
