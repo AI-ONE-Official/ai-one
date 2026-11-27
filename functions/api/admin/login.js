@@ -1,4 +1,12 @@
 
+const ALLOWED_ORIGIN = "https://ai-one-a2u.pages.dev";
+const MAX_BODY_SIZE = 2048;
+const MAX_PASSWORD_LENGTH = 1024;
+const LOGIN_WINDOW_SECONDS = 900;
+const LOGIN_BLOCK_SECONDS = 900;
+const MAX_LOGIN_ATTEMPTS = 5;
+const SESSION_DURATION_SECONDS = 3600;
+
 function json(data, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(data), {
     status,
@@ -6,6 +14,9 @@ function json(data, status = 200, extraHeaders = {}) {
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-store",
       "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "DENY",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+      "Strict-Transport-Security": "max-age=31536000",
       ...extraHeaders
     }
   });
@@ -80,7 +91,7 @@ async function hashIP(ip, secret) {
     .join("");
 }
 
-async function readLimitedBody(request, limit = 2048) {
+async function readLimitedBody(request, limit = MAX_BODY_SIZE) {
   const contentLength = request.headers.get("Content-Length");
 
   if (contentLength !== null) {
@@ -105,7 +116,9 @@ async function readLimitedBody(request, limit = 2048) {
     while (true) {
       const { done, value } = await reader.read();
 
-      if (done) break;
+      if (done) {
+        break;
+      }
 
       total += value.byteLength;
 
@@ -135,6 +148,7 @@ async function readLimitedBody(request, limit = 2048) {
 
 export async function onRequestPost({ request, env }) {
   try {
+    // 1. Verify required server configuration.
     if (
       !env ||
       typeof env.ADMIN_PASSWORD !== "string" ||
@@ -149,11 +163,23 @@ export async function onRequestPost({ request, env }) {
       }, 500);
     }
 
+    // 2. Accept requests only from the official AI ONE origin.
     if (
-      request.headers.get("Content-Type")
-        ?.split(";")[0]
-        .trim()
-        .toLowerCase() !== "application/json"
+      request.headers.get("Origin") !== ALLOWED_ORIGIN
+    ) {
+      return json({
+        success: false,
+        message: "Forbidden request origin"
+      }, 403);
+    }
+
+    // 3. Require JSON.
+    const contentType = request.headers.get("Content-Type");
+
+    if (
+      !contentType ||
+      contentType.split(";")[0].trim().toLowerCase() !==
+        "application/json"
     ) {
       return json({
         success: false,
@@ -161,37 +187,7 @@ export async function onRequestPost({ request, env }) {
       }, 415);
     }
 
-    const ip = request.headers.get("CF-Connecting-IP");
-
-    if (!ip || ip.length > 100) {
-      return json({
-        success: false,
-        message: "Unable to process request"
-      }, 400);
-    }
-
-    const now = Math.floor(Date.now() / 1000);
-
-    const ipHash = await hashIP(
-      ip,
-      env.SESSION_SECRET
-    );
-
-    const existing = await env.DB.prepare(`
-      SELECT attempts, window_started_at, blocked_until
-      FROM admin_login_attempts
-      WHERE ip_hash = ?
-    `).bind(ipHash).first();
-
-    if (existing && existing.blocked_until > now) {
-      return json({
-        success: false,
-        message: "Too many attempts. Try again later."
-      }, 429, {
-        "Retry-After": String(existing.blocked_until - now)
-      });
-    }
-
+    // 4. Read and validate the request body before database queries.
     let body;
 
     try {
@@ -220,7 +216,7 @@ export async function onRequestPost({ request, env }) {
       Array.isArray(data) ||
       typeof data.password !== "string" ||
       data.password.length === 0 ||
-      data.password.length > 1024
+      data.password.length > MAX_PASSWORD_LENGTH
     ) {
       return json({
         success: false,
@@ -228,10 +224,46 @@ export async function onRequestPost({ request, env }) {
       }, 400);
     }
 
+    // 5. Obtain the Cloudflare-provided client IP.
+    const ip = request.headers.get("CF-Connecting-IP");
+
+    if (!ip || ip.length > 100) {
+      return json({
+        success: false,
+        message: "Unable to process request"
+      }, 400);
+    }
+
+    const now = Math.floor(Date.now() / 1000);
+
+    const ipHash = await hashIP(
+      ip,
+      env.SESSION_SECRET
+    );
+
+    // 6. Check whether this IP is currently blocked.
+    const existing = await env.DB.prepare(`
+      SELECT attempts, window_started_at, blocked_until
+      FROM admin_login_attempts
+      WHERE ip_hash = ?
+    `).bind(ipHash).first();
+
+    if (existing && existing.blocked_until > now) {
+      return json({
+        success: false,
+        message: "Too many attempts. Try again later."
+      }, 429, {
+        "Retry-After": String(existing.blocked_until - now)
+      });
+    }
+
+    // 7. Verify administrator password.
     if (!constantTimeEqual(
       data.password,
       env.ADMIN_PASSWORD
     )) {
+      // Atomic database update protects the attempt counter
+      // from concurrent login requests.
       const result = await env.DB.prepare(`
         INSERT INTO admin_login_attempts (
           ip_hash,
@@ -293,14 +325,15 @@ export async function onRequestPost({ request, env }) {
       }, 401);
     }
 
-    // Clear failed attempts after successful authentication.
+    // 8. Clear failed attempts after successful authentication.
     await env.DB.prepare(`
       DELETE FROM admin_login_attempts
       WHERE ip_hash = ?
     `).bind(ipHash).run();
 
+    // 9. Create a new administrator session.
     const sessionId = crypto.randomUUID();
-    const expiresAt = now + 3600;
+    const expiresAt = now + SESSION_DURATION_SECONDS;
 
     const token = await signToken({
       role: "admin",
@@ -322,7 +355,7 @@ export async function onRequestPost({ request, env }) {
       now
     ).run();
 
-    // Best-effort cleanup: maintenance must not block login.
+    // 10. Best-effort cleanup of expired database records.
     try {
       await env.DB.batch([
         env.DB.prepare(`
@@ -337,9 +370,10 @@ export async function onRequestPost({ request, env }) {
         `).bind(now - 86400)
       ]);
     } catch {
-      // Login remains valid if cleanup fails.
+      // Cleanup failure must not invalidate a valid login.
     }
 
+    // 11. Set a secure administrator session cookie.
     return json({
       success: true,
       message: "Login successful"
