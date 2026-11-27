@@ -1,0 +1,61 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/</loc>
+  </url>
+
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=canva</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=chatgpt</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=claude</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=elevenlabs</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=elicit</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=gamma</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=github-copilot</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=gemini</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=grammarly</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=hubspot-ai</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=khanmigo</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=leonardo-ai</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=midjourney</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=notion-ai</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=perplexity</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=runway</loc>
+  </url>
+  <url>
+    <loc>https://ai-one-a2u.pages.dev/?tool=zapier-ai</loc>
+  </url>
+
+</urlset>
